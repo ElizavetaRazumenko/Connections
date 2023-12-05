@@ -1,0 +1,89 @@
+<div class="login_container">
+  <p class="title">Login</p>
+  <div class="login_wrapper">
+    <p class="title_login">Don't have an account yet?</p>
+    <button class="button_register" (click)="goToTheRegisterPage()">
+      Register
+    </button>
+  </div>
+  <form class="login_form" [formGroup]="loginForm" (ngSubmit)="onFormSubmit()">
+    <label for="inputEmail">Email</label>
+
+    <div class="input_container">
+      <input
+        type="text"
+        #inputEmail
+        formControlName="email"
+        (input)="checkExistingError()" />
+
+      <div
+        *ngIf="
+        email.invalid &&
+        (email.dirty || email.touched)
+      ">
+        <span
+          *ngIf="
+          email.errors &&
+          email.errors['required']
+        "
+          class="error_message"
+          >Please enter a email</span
+        >
+        <span
+          *ngIf="
+          email.errors &&
+          email.errors['email']
+        "
+          class="error_message"
+          >Invalid email</span
+        >
+      </div>
+    </div>
+
+    <label for="inputPassword">Password</label>
+
+    <div class="input_container">
+      <input
+        type="password"
+        #inputPassword
+        formControlName="password"
+        (input)="checkExistingError()" />
+
+      <div
+        *ngIf="
+      password.invalid &&
+      (password.dirty || password.touched)
+    ">
+        <span
+          *ngIf="
+        password.errors &&
+        password.errors['required']
+      "
+          class="error_message"
+          >Please enter a password</span
+        >
+        <span
+          *ngIf="
+        password.errors &&
+        password.errors['passwordNotStrength'] && 
+        password.errors['passwordNotStrength'].value 
+      "
+          class="error_message"
+          >{{ password.errors['passwordNotStrength'].message }}</span
+        >
+      </div>
+    </div>
+
+    <button
+      [class]="(loginForm.invalid || !canRequestBeSent)? 'button_submit_disabled' : 'button_submit' ">
+      Submit
+    </button>
+  </form>
+
+  <div class="alerts_wrapper" *ngIf="notifyArray.length">
+    <app-alert
+      *ngFor="let notify of notifyArray"
+      [notifyInfo]="notify"
+      (eventDeleteNotify)="deleteNotify($event)"></app-alert>
+  </div>
+</div>

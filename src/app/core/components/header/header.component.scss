@@ -1,0 +1,54 @@
+@import '../../../../global.scss';
+
+.header_container {
+    margin: 0;
+    min-width: 1280px;
+    height: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0px 5px 17px 2px $main-shadow;
+    background-color: $main-black;
+
+    .nav_bar {
+        width: 50%;
+        height: 100%;
+    }
+
+    .nav_items {
+        margin: 0;
+        height: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-right: 50px;
+
+        li,
+        .nav_button {
+            cursor: pointer;
+            padding-bottom: 2px;
+            color: $main-white;
+            text-decoration: none;
+            list-style-type: none;
+            font-size: 1.1rem;
+            font-weight: 700;
+            transition: .4s;
+        }
+
+        li:hover,
+        .nav_button:hover {
+            color: $main-white-hover;
+        }
+
+        .active {
+            text-decoration: underline $main-azure 3px;
+            color: $main-white-hover;
+        }
+    }
+
+}
+
+.nav_button {
+    border: none;
+    background-color: $main-black;
+}

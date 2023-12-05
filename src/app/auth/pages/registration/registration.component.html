@@ -1,0 +1,127 @@
+<div class="registration_container">
+  <p class="title">Registration</p>
+  <div class="login_wrapper">
+    <p class="title_login">Already have an account?</p>
+    <button class="button_login" (click)="goToTheLoginPage()">Login</button>
+  </div>
+  <form
+    class="registration_form"
+    [formGroup]="registerForm"
+    (ngSubmit)="onFormSubmit()">
+    <label for="inputName">First name</label>
+
+    <div class="input_container">
+      <input type="text" #inputName formControlName="firstName" />
+
+      <div
+        *ngIf="
+        firstName.invalid &&
+        (firstName.dirty || firstName.touched)
+      ">
+        <span
+          *ngIf="
+          firstName.errors &&
+          firstName.errors['required']
+        "
+          class="error_message"
+          >Please enter a first name</span
+        >
+        <span
+          *ngIf="
+        firstName.errors &&
+        firstName.errors['loginNotValid'] && 
+        firstName.errors['loginNotValid'].value 
+  "
+          class="error_message"
+          >{{ firstName.errors['loginNotValid'].message }}</span
+        >
+        <span
+          *ngIf="
+        firstName.errors &&
+        firstName.errors['maxlength']
+      "
+          class="error_message"
+          >Maximum 40 characters allowed</span
+        >
+      </div>
+    </div>
+
+    <label for="inputEmail">Email</label>
+
+    <div class="input_container">
+      <input
+        type="text"
+        #inputEmail
+        formControlName="email"
+        (input)="checkExistingError()" />
+
+      <span *ngIf="isShowUserError" class="error_message"
+        >This user already exists</span
+      >
+
+      <div
+        *ngIf="
+      email.invalid &&
+      (email.dirty || email.touched)
+    ">
+        <span
+          *ngIf="
+        email.errors &&
+        email.errors['required']
+      "
+          class="error_message"
+          >Please enter a email</span
+        >
+        <span
+          *ngIf="
+        email.errors &&
+        email.errors['email']
+      "
+          class="error_message"
+          >Invalid email</span
+        >
+      </div>
+    </div>
+
+    <label for="inputPassword">Password</label>
+
+    <div class="input_container">
+      <input type="password" #inputPassword formControlName="password" />
+
+      <div
+        *ngIf="
+    password.invalid &&
+    (password.dirty || password.touched)
+  ">
+        <span
+          *ngIf="
+      password.errors &&
+      password.errors['required']
+    "
+          class="error_message"
+          >Please enter a password</span
+        >
+        <span
+          *ngIf="
+      password.errors &&
+      password.errors['passwordNotStrength'] && 
+      password.errors['passwordNotStrength'].value 
+    "
+          class="error_message"
+          >{{ password.errors['passwordNotStrength'].message }}</span
+        >
+      </div>
+    </div>
+
+    <button
+      [class]="(registerForm.invalid || !canRequestBeSent)? 'button_submit_disabled' : 'button_submit' ">
+      Submit
+    </button>
+  </form>
+  <div class="alerts_wrapper" *ngIf="notifyArray.length">
+    <app-alert
+      *ngFor="let notify of notifyArray"
+      [notifyInfo]="notify"
+      (eventDeleteNotify)="deleteNotify($event)"></app-alert>
+  </div>
+</div>

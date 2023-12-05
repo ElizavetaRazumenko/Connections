@@ -1,0 +1,29 @@
+<div class="header_container">
+  <app-logo (click)="goToTheMain()"></app-logo>
+  <nav class="nav_bar">
+    <ul class="nav_items">
+      <li>
+        <button
+          [class]="currentURl === '/' ? 'nav_button active' : 'nav_button'"
+          (click)="goToTheMain()">
+          Main
+        </button>
+      </li>
+      <li>
+        <button
+          [class]="currentURl === '/profile' ? 'nav_button active' : 'nav_button'"
+          (click)="goToTheProfile()">
+          Profile
+        </button>
+      </li>
+      <li>
+        <button class="nav_button" (click)="goToTheMain()">Groups</button>
+      </li>
+      <li>
+        <button class="nav_button" (click)="goToTheMain()">
+          Conversations
+        </button>
+      </li>
+    </ul>
+  </nav>
+</div>

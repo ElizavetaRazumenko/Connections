@@ -1,0 +1,24 @@
+.error_container {
+    margin: 0 auto;
+    margin-top: 250px;
+
+    .title_container {
+        display: flex;
+        align-items: center;
+    }
+
+    .title {
+        font-size: 3rem;
+        font-weight: 700;
+        margin: 0;
+        margin-right: 20px;
+    }
+
+    .error_icon {
+        width: 50px;
+        height: 50px;
+        background-image: url(../../../../assets/error-icon.png);
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+}

@@ -1,0 +1,12 @@
+<div class="alert_wrapper">
+  <button class="close_btn" (click)="deleteNotify()">
+    <div class="button_content"></div>
+  </button>
+  <div class="notify_wrapper">
+    <div
+      [class]="notifyInfo.isSuccess ? 'icon success_icon' : 'icon unsuccess_icon'"></div>
+    <p [class]="notifyInfo.isSuccess ? 'message green' : 'message red'">
+      {{ notifyInfo.message }}
+    </p>
+  </div>
+</div>

@@ -1,0 +1,22 @@
+@import '../../../../global.scss';
+
+.logo {
+    cursor: pointer;
+    margin-left: 30px;
+    background-color: $main-black;
+    border: none;
+    display: flex;
+    align-items: center;
+    color: $main-white;
+    font-size: 1.2rem;
+    font-weight: 700;
+
+    .logo_icon {
+        margin-right: 10px;
+        width: 30px;
+        height: 25px;
+        background-image: url(../../../../assets/logo.png);
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+}

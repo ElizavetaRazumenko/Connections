@@ -1,0 +1,68 @@
+@import '../../../../global.scss';
+
+.alert_wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    margin-bottom: 35px;
+    height: 120px;
+    border-radius: 15px;
+    box-shadow: 2px 3px 15px 1px rgba($main-grey-light, .5);
+
+
+    .close_btn {
+        margin: 12px 10px 0 0;
+        border: none;
+        align-self: flex-end;
+        background-color: $main-white;
+    }
+
+    .button_content {
+        cursor: pointer;
+        width: 15px;
+        height: 19px;
+        background-image: url(../../../../assets/cross.png);
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+
+    .message {
+        margin: 15px 25px 15px 15px;
+        font-size: 1rem;
+        font-weight: 700;
+    }
+
+    .red {
+        color: $main-red;
+    }
+
+    .green {
+        color: $main-green-font;
+    }
+
+    .notify_wrapper {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        padding: 0 35px;
+
+        .icon {
+            width: 25px;
+            height: 25px;
+            background-repeat: no-repeat;
+            background-size: contain;
+        }
+
+        .success_icon {
+            background-image: url(../../../../assets/seccess.png);
+        }
+
+        .unsuccess_icon {
+            margin-top: 5px;
+            width: 30px;
+            height: 30px;
+            background-image: url(../../../../assets/red_cross.png);
+        }
+    }
+}
