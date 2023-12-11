@@ -3,7 +3,9 @@ import { ProfileData } from '../models/profile.model';
 
 export enum ProfileType {
   saveProfileData = '[profile] saveProfileData',
-  sendUserData = '[profile] sendUserData'
+  sendUserData = '[profile] sendUserData',
+  error = '[profile] error',
+  setName = '[profile] setName'
 }
 
 export const profileSaveDataAction = createAction(
@@ -11,7 +13,14 @@ export const profileSaveDataAction = createAction(
   props<{ profileData: ProfileData }>()
 );
 
-export const profileSendUserDataAction = createAction(
-  ProfileType.sendUserData,
-  props<{ 'rs-uid': string; 'rs-email': string; Authorization: string }>()
+export const profileSendUserDataAction = createAction(ProfileType.sendUserData);
+
+export const profileErrorAction = createAction(
+  ProfileType.error,
+  props<{ message: string }>()
+);
+
+export const profileSetNameAction = createAction(
+  ProfileType.setName,
+  props<{ name: string }>()
 );

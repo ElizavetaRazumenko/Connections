@@ -1,0 +1,110 @@
+<div class="groups_list">
+  <p class="title">Groups</p>
+  <div class="update_wrapper">
+    <button
+      [class]="timer.canBeUpdate ? 'button' : 'button_disabled'"
+      (click)="updateGroups()">
+      Update
+    </button>
+
+    <div [class]="timer.isVisible ? 'timer' : 'timer hidden'">
+      <span>{{ time.minutes | leadingZero }}</span>
+      <span>:</span>
+      <span>{{ time.seconds | leadingZero }}</span>
+    </div>
+  </div>
+
+  <button class="button_create" (click)="toTheFormMode($event)">
+    <div class="create_icon"></div>
+    <p class="main_text">Create a new group</p>
+  </button>
+  <ng-container *ngIf="isFormMode">
+    <div class="form_wrapper">
+      <form
+        [formGroup]="createGroupForm"
+        class="form"
+        (ngSubmit)="onFormSublit()">
+        <p class="main_text form_title">Enter the name of the new group</p>
+        <div class="input_wrapper">
+          <input
+            formControlName="name"
+            class="input_name"
+            type="text"
+            id="name" />
+          <div
+            *ngIf="
+                  name.invalid &&
+                  (name.dirty || name.touched)
+                ">
+            <span
+              *ngIf="
+                    name.errors &&
+                    name.errors['required']
+                  "
+              class="error_message"
+              >Please enter a group name</span
+            >
+            <span
+              *ngIf="
+                  name.errors &&
+                  name.errors['nameNotValid'] && 
+                  name.errors['nameNotValid'].value 
+            "
+              class="error_message"
+              >{{ name.errors['nameNotValid'].message }}</span
+            >
+            <span
+              *ngIf="
+                  name.errors &&
+                  name.errors['maxlength']
+                "
+              class="error_message"
+              >Maximum 30 characters allowed</span
+            >
+          </div>
+        </div>
+
+        <div class="buttons_wrapper">
+          <button
+            [class]="createGroupForm.invalid || !isRequestCanBeSent
+            ? 'button_disabled form_button' 
+            : 'button form_button'">
+            Create
+          </button>
+          <button
+            type="button"
+            class="button form_button"
+            (click)="fromTheFormMode()">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="isGroupDeletionMode">
+    <div class="form_wrapper modal_delete">
+      <p class="delete_title">Need to delete a selected group?</p>
+
+      <div class="buttons_wrapper">
+        <button class="button form_button" (click)="deleteGroup()">
+          Delete
+        </button>
+        <button
+          type="button"
+          class="button form_button"
+          (click)="fromTheGroupDeletionMode()">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="groupsList$ | async as groups">
+    <div class="groups-list_wrapper" *ngIf="groups.length">
+      <ng-container *ngFor="let group of groups">
+        <app-group [groupList]="group"></app-group>
+      </ng-container>
+    </div>
+  </ng-container>
+</div>

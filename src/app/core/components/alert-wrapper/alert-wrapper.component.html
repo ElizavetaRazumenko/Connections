@@ -1,0 +1,5 @@
+<ng-container *ngIf="alerts$ | async as alerts">
+  <div class="alerts_wrapper" *ngIf="alerts.length">
+    <app-alert *ngFor="let alert of alerts" [notifyInfo]="alert"></app-alert>
+  </div>
+</ng-container>

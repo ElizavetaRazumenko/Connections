@@ -1,0 +1,11 @@
+<div class="message">
+  <p [class]="messageInfo.isMyMessage ? 'name my' : 'name'">
+    {{ messageInfo.isMyMessage ? 'Me' : messageInfo.authorID }}
+  </p>
+  <p [class]="messageInfo.isMyMessage ? 'content my' : 'content'">
+    {{ messageInfo.message}}
+  </p>
+  <p [class]="messageInfo.isMyMessage ? 'time my' : 'time'">
+    {{ messageInfo.createdAt | dateMessages }}
+  </p>
+</div>

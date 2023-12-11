@@ -1,0 +1,36 @@
+@import '../../../../global.scss';
+
+.user_wrapper {
+  cursor: pointer;
+  padding: 0 35px;
+  width: 95%;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  border-radius: 10px;
+  margin: 10px 0;
+  transition: .5s;
+  box-shadow: 1px 2px 3px 1px $main-grey;
+  background-color: rgba($main-black-hover, .15);
+
+  &:hover {
+    background-color: rgba($main-black-hover, .25);
+  }
+
+  .user_name {
+    font-style: italic;
+    font-weight: 700;
+    font-size: 1.4rem;
+    margin: 0;
+    margin-left: 10px;
+  }
+
+}
+
+.dedicated {
+  background-color: $main-blue;
+
+  .user_name {
+    color: $main-white;
+  }
+}

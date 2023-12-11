@@ -1,0 +1,53 @@
+@import '../../../../global.scss';
+
+.group_wrapper {
+  cursor: pointer;
+  border: none;
+  padding: 0 35px;
+  width: 95%;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  border-radius: 10px;
+  margin: 10px 0;
+  transition: .5s;
+  box-shadow: 1px 2px 3px 1px $main-grey;
+  background-color: rgba($main-shadow, .15);
+
+  &:hover {
+    background-color: rgba($main-shadow, .25);
+  }
+
+  .group_name {
+    font-style: italic;
+    font-weight: 700;
+    font-size: 1.4rem;
+    margin: 0;
+    margin-left: 10px;
+  }
+
+}
+
+.custom_group {
+  justify-content: space-between;
+}
+
+.button_delete {
+  margin-top: 2px;
+  cursor: pointer;
+  border: none;
+  background-color: rgba($main-shadow, .15);
+  transition: .5s;
+
+  .delete_icon {
+    width: 15px;
+    height: 15px;
+    background-image: url(../../../../assets/cross.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+}
+
+.group_wrapper:hover .button_delete {
+  background-color: rgba($main-shadow, .25);
+}

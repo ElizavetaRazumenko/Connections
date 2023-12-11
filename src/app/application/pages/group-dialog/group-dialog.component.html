@@ -1,0 +1,35 @@
+<div class="dialogs_wrapper">
+  <div class="update_wrapper">
+    <button
+      [class]="timer.canBeUpdate ? 'button' : 'button_disabled'"
+      (click)="updateGroups()">
+      Update
+    </button>
+
+    <div [class]="timer.isVisible ? 'timer' : 'timer hidden'">
+      <span>{{ time.minutes | leadingZero }}</span>
+      <span>:</span>
+      <span>{{ time.seconds | leadingZero }}</span>
+    </div>
+  </div>
+  <div class="messages_wrapper">
+    <ng-container *ngIf="messages.length">
+      <div class="messages">
+        <div
+          *ngFor="let message of messages"
+          [class]="message.isMyMessage ? 'my message' : 'message'">
+          <app-group-message [messageInfo]="message"></app-group-message>
+        </div>
+      </div>
+    </ng-container>
+
+    <form [formGroup]="messageForm">
+      <input type="text" formControlName="message" />
+      <button
+        [class]="messageForm.invalid ?  'button_send_msg_disabled' : 'button_send_msg'">
+        Send
+      </button>
+    </form>
+  </div>
+  <a class="button link" routerLink="/">To the Main</a>
+</div>

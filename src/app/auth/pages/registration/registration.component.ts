@@ -10,12 +10,8 @@ import { Router } from '@angular/router';
 import { passwordNotStrength } from '../../validators/password.validator';
 import { AuthService } from '../../services/auth.service';
 import { loginNotValid } from '../../validators/login.validator';
-
-interface InfoNotify {
-  message: string;
-  isSuccess: boolean;
-  id: string;
-}
+import { Store } from '@ngrx/store';
+import { alertAddAlertAction } from 'src/app/redux/actions/alert.action';
 
 @Component({
   selector: 'app-registration',
@@ -29,11 +25,8 @@ export class RegistrationComponent implements OnInit {
     password: FormControl;
   }>;
 
-  public notifyArray: InfoNotify[] = [];
-
   public registrationResponseData$ = this.authService.registrationResponseData$;
 
-  public serverErrorMessage = '';
   public isUserExist = false;
   public canRequestBeSent = true;
   public currentEmail = '';
@@ -42,7 +35,8 @@ export class RegistrationComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private store: Store
   ) {}
 
   ngOnInit(): void {
@@ -82,19 +76,20 @@ export class RegistrationComponent implements OnInit {
 
       this.registrationResponseData$.subscribe({
         next: () => {
-          this.notifyArray.push({
-            message: 'User successfully registered',
-            isSuccess: true,
-            id: window.crypto.randomUUID()
-          });
+          this.store.dispatch(
+            alertAddAlertAction({
+              notify: {
+                message: 'User successfully registered',
+                isSuccess: true,
+                id: window.crypto.randomUUID()
+              }
+            })
+          );
 
-          setTimeout(() => {
-            this.router.navigate(['/signin']);
-            this.canRequestBeSent = true;
-          }, 2000);
+          this.router.navigate(['/signin']);
+          this.canRequestBeSent = true;
         },
         error: (error) => {
-          this.serverErrorMessage = error.error.message;
           this.checkErrorMessage(error.error.message as string);
           this.sendNotify(error.error.message as string);
         }
@@ -121,32 +116,24 @@ export class RegistrationComponent implements OnInit {
   }
 
   private sendNotify(message: string) {
+    let reason = '';
     if (message.endsWith('already exists')) {
-      this.notifyArray.push({
-        message: 'Unsuccessful! A user with this email already exists',
-        isSuccess: false,
-        id: window.crypto.randomUUID()
-      });
+      reason = 'Unsuccessful! A user with this email already exists';
     } else if (message.endsWith('are required')) {
-      this.notifyArray.push({
-        message: 'Unsuccessful! Please fill in all the fields',
-        isSuccess: false,
-        id: window.crypto.randomUUID()
-      });
-    } else {
-      this.notifyArray.push({
-        message: 'Something went wrong, please try again',
-        isSuccess: false,
-        id: window.crypto.randomUUID()
-      });
-    }
+      reason = 'Unsuccessful! Please fill in all the fields';
+    } else reason = 'Something went wrong, please try again';
+    this.store.dispatch(
+      alertAddAlertAction({
+        notify: {
+          message: reason,
+          isSuccess: false,
+          id: window.crypto.randomUUID()
+        }
+      })
+    );
   }
 
   public goToTheLoginPage() {
     this.router.navigate(['/signin']);
-  }
-
-  public deleteNotify(id: string) {
-    this.notifyArray = this.notifyArray.filter((notify) => notify.id !== id);
   }
 }

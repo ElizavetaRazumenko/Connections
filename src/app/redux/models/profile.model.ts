@@ -3,8 +3,12 @@ export interface ProfileData {
   name: string;
   uid: string;
   createdAt: string;
+  isDataBeenReceived: boolean;
 }
 
 export interface ProfileState {
-  profile: ProfileData;
+  profile: {
+    data: ProfileData;
+    errorMessage: string;
+  };
 }

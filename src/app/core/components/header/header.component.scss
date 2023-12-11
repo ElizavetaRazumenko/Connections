@@ -33,6 +33,17 @@
             font-size: 1.1rem;
             font-weight: 700;
             transition: .4s;
+            border: none;
+            background-color: $main-black;
+        }
+
+        .nav_button.disabled {
+            cursor: auto;
+            color: $main-grey;
+
+            &:hover {
+                color: $main-grey;
+            }
         }
 
         li:hover,
@@ -46,9 +57,4 @@
         }
     }
 
-}
-
-.nav_button {
-    border: none;
-    background-color: $main-black;
 }

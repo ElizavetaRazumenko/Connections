@@ -1,3 +1,5 @@
+@import '../../../../global.scss';
+
 .error_container {
     margin: 0 auto;
     margin-top: 250px;
@@ -12,6 +14,31 @@
         font-weight: 700;
         margin: 0;
         margin-right: 20px;
+    }
+
+    .message_wrapper {
+        margin-top: 20px;
+        display: flex;
+
+        .message {
+            font-size: 1.2rem;
+        }
+
+        .button_main {
+            cursor: pointer;
+            border: none;
+            font-size: 1.2rem;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            background-color: $main-white;
+            text-decoration: underline;
+            color: $main-black;
+            transition: .5s;
+
+            &:hover {
+                color: $main-grey;
+            }
+        }
+    
     }
 
     .error_icon {

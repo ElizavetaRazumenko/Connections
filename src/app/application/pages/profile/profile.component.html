@@ -1,1 +1,92 @@
-<p>profile works!</p>
+<div class="profile_container">
+  <p class="title">User Data</p>
+  <form class="form" [formGroup]="editionalForm" (ngSubmit)="onFormSubmit()">
+    <ng-container *ngIf="profileData$ | async as profileData">
+      <div class="info_wrapper">
+        <div class="blocks">
+          <div class="string_wrapper">
+            <ng-container *ngIf="!isOnEditionMode">
+              <span class="string">Name: </span>
+              <span class="string data">{{ profileData.name }}</span>
+            </ng-container>
+            <ng-container *ngIf="isOnEditionMode">
+              <label for="#name" class="string">Name: </label>
+              <input
+                formControlName="name"
+                class="input_name"
+                type="text"
+                id="name" />
+              <div
+                *ngIf="
+                name.invalid &&
+                (name.dirty || name.touched)
+              ">
+                <span
+                  *ngIf="
+                  name.errors &&
+                  name.errors['required']
+                "
+                  class="error_message"
+                  >Please enter a first name</span
+                >
+                <span
+                  *ngIf="
+                name.errors &&
+                name.errors['loginNotValid'] && 
+                name.errors['loginNotValid'].value 
+          "
+                  class="error_message"
+                  >{{ name.errors['loginNotValid'].message }}</span
+                >
+                <span
+                  *ngIf="
+                name.errors &&
+                name.errors['maxlength']
+              "
+                  class="error_message"
+                  >Maximum 40 characters allowed</span
+                >
+              </div>
+            </ng-container>
+          </div>
+          <div class="string_wrapper">
+            <span class="string">Email: </span>
+            <span class="string data">{{ profileData.email }}</span>
+          </div>
+        </div>
+
+        <div class="blocks">
+          <div class="string_wrapper">
+            <span class="string">ID: </span>
+            <span class="string data">{{ profileData.uid }}</span>
+          </div>
+          <div class="string_wrapper">
+            <span class="string">Date of creation: </span>
+            <span class="string data"
+              >{{ profileData.createdAt | date: 'fullDate' }}</span
+            >
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <div class="editor_wrapper">
+      <ng-container *ngIf="!isOnEditionMode">
+        <button
+          type="button"
+          class="button button_edit"
+          (click)="toTheEditionMode()">
+          Edit
+        </button>
+      </ng-container>
+      <ng-container *ngIf="isOnEditionMode">
+        <button
+          [class]="editionalForm.invalid || !isRequestCanBeSent? 'button button_disabled' : 'button'">
+          Save
+        </button>
+        <button type="button" class="button" (click)="toTheNormalMode()">
+          Cancel
+        </button>
+      </ng-container>
+    </div>
+  </form>
+</div>

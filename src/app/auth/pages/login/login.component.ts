@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -7,16 +7,13 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { Store } from '@ngrx/store';
+import { alertAddAlertAction } from 'src/app/redux/actions/alert.action';
+import { Subject, takeUntil } from 'rxjs';
 
-interface ILoginResponseBody {
+interface LoginResponseBody {
   token: string;
   uid: string;
-}
-
-interface InfoNotify {
-  message: string;
-  isSuccess: boolean;
-  id: string;
 }
 
 @Component({
@@ -24,14 +21,14 @@ interface InfoNotify {
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   public loginForm!: FormGroup<{
     email: FormControl<string | null>;
     password: FormControl;
   }>;
 
   public loginResponseData$ = this.authService.loginResponseData$;
-  public notifyArray: InfoNotify[] = [];
+  private ngSubscribe$ = new Subject<void>();
 
   public canRequestBeSent = true;
 
@@ -44,7 +41,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private store: Store
   ) {}
 
   ngOnInit(): void {
@@ -52,6 +50,11 @@ export class LoginComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
     });
+  }
+
+  ngOnDestroy(): void {
+    this.ngSubscribe$.next();
+    this.ngSubscribe$.complete();
   }
 
   public get email() {
@@ -70,20 +73,23 @@ export class LoginComponent implements OnInit {
         this.loginForm.controls.password.value || ''
       );
 
-      this.loginResponseData$.subscribe({
+      this.loginResponseData$.pipe(takeUntil(this.ngSubscribe$)).subscribe({
         next: (response) => {
-          this.saveLoginTokensToLS(response.body as ILoginResponseBody);
+          this.saveLoginTokensToLS(response.body as LoginResponseBody);
 
-          this.notifyArray.push({
-            message: 'User has successfully logged in',
-            isSuccess: true,
-            id: window.crypto.randomUUID()
-          });
+          this.store.dispatch(
+            alertAddAlertAction({
+              notify: {
+                message: 'User has successfully logged in',
+                isSuccess: true,
+                id: window.crypto.randomUUID()
+              }
+            })
+          );
 
-          setTimeout(() => {
-            this.router.navigate(['/']);
-            this.canRequestBeSent = true;
-          }, 2000);
+          this.authService.userLogin();
+          this.router.navigate(['/']);
+          this.canRequestBeSent = true;
         },
         error: (error) => {
           this.sendNotify(error.error.message as string);
@@ -116,8 +122,8 @@ export class LoginComponent implements OnInit {
     this.router.navigate(['/signup']);
   }
 
-  private saveLoginTokensToLS(body: ILoginResponseBody) {
-    localStorage.setItem('token', body.token);
+  private saveLoginTokensToLS(body: LoginResponseBody) {
+    localStorage.setItem('token', `Bearer ${body.token}`);
     localStorage.setItem('uid', body.uid);
     localStorage.setItem(
       'email',
@@ -126,28 +132,20 @@ export class LoginComponent implements OnInit {
   }
 
   private sendNotify(message: string) {
+    let reason = '';
     if (message.endsWith('exist in the system.')) {
-      this.notifyArray.push({
-        message: 'This user does not exist. Please register first',
-        isSuccess: false,
-        id: window.crypto.randomUUID()
-      });
+      reason = 'This user does not exist. Please register first';
     } else if (message.endsWith('are required.')) {
-      this.notifyArray.push({
-        message: 'Unsuccessful! Please fill in all the fields',
-        isSuccess: false,
-        id: window.crypto.randomUUID()
-      });
-    } else {
-      this.notifyArray.push({
-        message: 'Something went wrong, please try again',
-        isSuccess: false,
-        id: window.crypto.randomUUID()
-      });
-    }
-  }
-
-  public deleteNotify(id: string) {
-    this.notifyArray = this.notifyArray.filter((notify) => notify.id !== id);
+      reason = 'Unsuccessful! Please fill in all the fields';
+    } else reason = 'Something went wrong, please try again';
+    this.store.dispatch(
+      alertAddAlertAction({
+        notify: {
+          message: reason,
+          isSuccess: false,
+          id: window.crypto.randomUUID()
+        }
+      })
+    );
   }
 }

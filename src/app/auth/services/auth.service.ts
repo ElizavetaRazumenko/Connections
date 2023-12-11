@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, switchMap } from 'rxjs';
+import { BehaviorSubject, Observable, switchMap } from 'rxjs';
 import { HttpService } from 'src/app/core/services/http.service';
 
-interface IRedistrationQueryParams {
+interface RedistrationQueryParams {
   email: string;
   name: string;
   password: string;
 }
 
-interface ILoginQueryParams {
+interface LoginQueryParams {
   email: string;
   password: string;
 }
@@ -17,14 +17,28 @@ interface ILoginQueryParams {
   providedIn: 'root'
 })
 export class AuthService {
-  private redistrationQueryParams: BehaviorSubject<IRedistrationQueryParams> =
+  private isUserAuth: BehaviorSubject<boolean> = new BehaviorSubject(
+    localStorage.getItem('token') ? true : false
+  );
+
+  public isUserAuth$: Observable<boolean> = this.isUserAuth.asObservable();
+
+  public userLogin() {
+    this.isUserAuth.next(true);
+  }
+
+  public userLogout() {
+    this.isUserAuth.next(false);
+  }
+
+  private redistrationQueryParams: BehaviorSubject<RedistrationQueryParams> =
     new BehaviorSubject({
       email: '',
       name: '',
       password: ''
     });
 
-  private loginQueryParams: BehaviorSubject<ILoginQueryParams> =
+  private loginQueryParams: BehaviorSubject<LoginQueryParams> =
     new BehaviorSubject({
       email: '',
       password: ''

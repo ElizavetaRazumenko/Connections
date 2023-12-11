@@ -1,0 +1,190 @@
+@import '../../../../global.scss';
+
+.groups_list {
+    padding-left: 25px;
+    padding-top: 32px;
+    min-width: 780px;
+    height: max-content;
+}
+
+.title {
+    margin-top: 0;
+    font-size: 2rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+.button,
+.button_disabled {
+    cursor: pointer;
+    margin-bottom: 10px;
+    width: 150px;
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+    box-shadow: 1px 1px 4px .5px $main-black;
+    background-color: $main-white;
+    font-weight: 700;
+    font-size: 1.3rem;
+    transition: .5s;
+
+    &:hover {
+        background-color: $main-white-hover-button;
+    }
+}
+
+.button_disabled {
+    cursor: auto;
+    color: $main-grey;
+
+    &:hover {
+        background-color: $main-white;
+    }
+}
+
+.update_wrapper {
+    display: flex;
+}
+
+.timer {
+    margin-left: 30px;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+.button_create {
+    display: flex;
+    cursor: pointer;
+    border: none;
+    background-color: $main-white;
+    align-items: center;
+
+    .create_icon {
+        margin-right: 20px;
+        width: 20px;
+        height: 20px;
+        background-image: url(../../../../assets/plus.svg);
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+
+    .main_text {
+        margin-right: 30px;
+        font-size: 1.1rem;
+        color: $main-black;
+        transition: .5s;
+    }
+
+    &:hover .main_text {
+        color: $main-grey;
+    } 
+}
+
+
+.form {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 2px solid $main-black;
+    border-radius: 15px;
+    padding: 10px 15px;
+    margin-bottom: 30px;
+    background-image: url(../../../../assets/forms_bg.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    .form_title {
+        text-align: center;
+        font-size: 1.2rem;
+        font-weight: 700;
+    }
+
+    .input_wrapper {
+        min-height: 48px;
+        padding: 0 12px;
+        width: 100%;
+        padding: 0 20px;
+    }
+
+    .input_name {
+        height: 25px;
+        width: 100%;
+        margin-bottom: 5px;
+        padding: 5px 15px;
+        font-size: 1rem;
+        border: none;
+        border-radius: 15px;
+        box-shadow: inset 2px 3px $main-grey;
+    }
+
+    .buttons_wrapper {
+        margin-top: 25px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .form_button {
+        margin: 0 15px 20px;
+        width: 85px;
+        height: 25px;
+        font-size: 1rem;
+    }
+}
+
+
+.error_message {
+    color: $main-red;
+    font-weight: 700;
+    margin-left: 10px;
+}
+
+.groups-list_wrapper {
+    max-height: 720px;
+    width: 100%;
+    overflow-y: scroll;
+    border-top: 2px solid $main-black;
+    border-bottom: 2px solid $main-black;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+
+.modal_delete {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    background-color: $main-white;
+    border-radius: 15px;
+    padding: 20px 25px;
+    border: 2px solid $main-black;
+
+    .delete_title {
+        text-align: center;
+        margin-bottom: 35px;
+    }
+
+    .form_button {
+        margin: 0 15px 15px;
+        width: 85px;
+        height: 25px;
+        font-size: 1rem;
+    }
+}

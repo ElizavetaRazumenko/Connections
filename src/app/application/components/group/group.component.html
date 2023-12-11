@@ -1,0 +1,15 @@
+<ng-container *ngIf="groupList.createdBy !== currentUserId">
+  <button class="group_wrapper" (click)="toTheGroupDialog()">
+    <p class="group_name">{{ groupList.name }}</p>
+    <p class="group_name">{{ groupList.createdBy }}</p>
+  </button>
+</ng-container>
+
+<ng-container *ngIf="groupList.createdBy === currentUserId">
+  <button class="group_wrapper custom_group" (click)="toTheGroupDialog()">
+    <p class="group_name">{{ groupList.name }}</p>
+    <button class="button_delete" (click)="prepareForDeliting($event)">
+      <div class="delete_icon"></div>
+    </button>
+  </button>
+</ng-container>

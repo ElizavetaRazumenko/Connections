@@ -6,6 +6,7 @@ import { LoginComponent } from './auth/pages/login/login.component';
 import { MainComponent } from './application/pages/main/main.component';
 import { AuthGuard } from './auth/guard/auth.guard';
 import { ProfileComponent } from './application/pages/profile/profile.component';
+import { GroupDialogComponent } from './application/pages/group-dialog/group-dialog.component';
 
 const routes: Routes = [
   {
@@ -16,7 +17,12 @@ const routes: Routes = [
   },
   { path: 'signup', component: RegistrationComponent },
   { path: 'signin', component: LoginComponent },
-  { path: 'profile', component: ProfileComponent },
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
+  {
+    path: 'group/:groupID',
+    component: GroupDialogComponent,
+    canActivate: [AuthGuard]
+  },
   { path: '**', component: ErrorComponent }
 ];
 

@@ -17,13 +17,22 @@
         </button>
       </li>
       <li>
-        <button class="nav_button" (click)="goToTheMain()">Groups</button>
+        <button class="nav_button">Groups</button>
       </li>
       <li>
-        <button class="nav_button" (click)="goToTheMain()">
-          Conversations
-        </button>
+        <button class="nav_button">Conversations</button>
       </li>
+      <ng-container *ngIf="isUserAuth$ | async as isUserAuth">
+        <ng-container *ngIf="isUserAuth">
+          <li>
+            <button
+              [class]="isLogoutButtonClicked ? 'nav_button disabled' :  'nav_button'"
+              (click)="Logout()">
+              Logout
+            </button>
+          </li>
+        </ng-container>
+      </ng-container>
     </ul>
   </nav>
 </div>

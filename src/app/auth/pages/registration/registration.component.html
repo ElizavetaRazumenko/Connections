@@ -118,10 +118,4 @@
       Submit
     </button>
   </form>
-  <div class="alerts_wrapper" *ngIf="notifyArray.length">
-    <app-alert
-      *ngFor="let notify of notifyArray"
-      [notifyInfo]="notify"
-      (eventDeleteNotify)="deleteNotify($event)"></app-alert>
-  </div>
 </div>

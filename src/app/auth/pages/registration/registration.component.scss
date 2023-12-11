@@ -78,8 +78,7 @@
     }
 }
 
-.error_message,
-.server_error_message {
+.error_message {
     color: $main-red;
     font-weight: 700;
 }
@@ -109,16 +108,3 @@
     }
 }
 
-.server_error_message {
-    font-size: 1.4rem;
-    text-align: center;
-}
-
-
-.alerts_wrapper {
-    position: absolute;
-    right: 30px;
-    top: 50px;
-    width: 350px;
-    height: max-content;
-}

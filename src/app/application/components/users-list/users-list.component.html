@@ -1,0 +1,24 @@
+<div class="members_list">
+  <p class="title">People</p>
+  <div class="update_wrapper">
+    <button
+      [class]="timer.canBeUpdate ? 'button' : 'button_disabled'"
+      (click)="updateUsers()">
+      Update
+    </button>
+
+    <div [class]="timer.isVisible ? 'timer' : 'timer hidden'">
+      <span>{{ time.minutes | leadingZero }}</span>
+      <span>:</span>
+      <span>{{ time.seconds | leadingZero }}</span>
+    </div>
+  </div>
+
+  <ng-container *ngIf="usersList$ | async as users">
+    <div class="users-list_wrapper" *ngIf="users.length">
+      <ng-container *ngFor="let user of users">
+        <app-user [userList]="user"></app-user>
+      </ng-container>
+    </div>
+  </ng-container>
+</div>

@@ -6,10 +6,14 @@ import { ProfileState } from '../models/profile.model';
 export const profileNode = 'profile';
 export const initialState: ProfileState = {
   profile: {
-    email: '',
-    name: '',
-    uid: '',
-    createdAt: ''
+    data: {
+      email: '',
+      name: '',
+      uid: '',
+      createdAt: '',
+      isDataBeenReceived: false
+    },
+    errorMessage: ''
   }
 };
 
@@ -19,7 +23,33 @@ export const profileReducer = createReducer(
     ProfileActions.profileSaveDataAction,
     (state: ProfileState, { profileData }): ProfileState => ({
       ...state,
-      profile: profileData
+      profile: {
+        ...state.profile,
+        data: profileData
+      }
+    })
+  ),
+  on(
+    ProfileActions.profileErrorAction,
+    (state: ProfileState, { message }): ProfileState => ({
+      ...state,
+      profile: {
+        ...state.profile,
+        errorMessage: message
+      }
+    })
+  ),
+  on(
+    ProfileActions.profileSetNameAction,
+    (state: ProfileState, { name }): ProfileState => ({
+      ...state,
+      profile: {
+        ...state.profile,
+        data: {
+          ...state.profile.data,
+          name
+        }
+      }
     })
   )
 );

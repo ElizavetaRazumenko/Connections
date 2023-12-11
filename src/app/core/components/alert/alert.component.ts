@@ -1,4 +1,7 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { alertDeleteNotifyAction } from 'src/app/redux/actions/alert.action';
+
 interface InfoNotify {
   message: string;
   isSuccess: boolean;
@@ -13,13 +16,13 @@ interface InfoNotify {
 export class AlertComponent implements OnInit {
   @Input() public notifyInfo!: InfoNotify;
 
-  @Output() public eventDeleteNotify = new EventEmitter();
+  constructor(private store: Store) {}
 
   ngOnInit(): void {
     setTimeout(() => this.deleteNotify(), 4000);
   }
 
   public deleteNotify() {
-    this.eventDeleteNotify.emit(this.notifyInfo.id);
+    this.store.dispatch(alertDeleteNotifyAction({ id: this.notifyInfo.id }));
   }
 }
