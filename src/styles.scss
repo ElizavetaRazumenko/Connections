@@ -1,6 +1,28 @@
 /* You can add global styles to this file, and also import other style files */
+@import './global.scss';
+
 * {
     box-sizing: border-box;
+}
+
+:root {
+    --main-azure: #2df6db;
+    --main-green: #0ce41e;
+    --main-black: #000000;
+    --main-white: #ffffff;
+    --main-grey: #9c9a9a;
+    --main-grey-light: #b8b7b7;
+    --main-green-font: #008000;
+    --main-red: #ff0000;
+    --main-white-hover: #dde2e1;
+    --main-white-hover-button: #ebeeed;
+    --main-black-hover: #575656;
+    --main-shadow: #cccbcb;
+    --main-blue: #278d80;
+    --main-light-green: #eaf1ec;
+    
+    --bgColor: white;
+    --color: black;
 }
 
 body {
@@ -12,4 +34,30 @@ body {
     padding: 0;
     margin: 0;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    background-color: var(--bgColor);
+    color: var(--color);
+
+    transition-timing-function: linear;
+    transition-duration: 0.5s;
+    transition-property: background-color, color;
+}
+
+// :root:has(.radio-dark-theme:checked) {
+//     --bgColor: black;
+//     --color: white;
+// }
+
+// :root:has(.radio-light-theme:checked) {
+//     --bgColor: white;
+//     --color: black;
+// }
+
+:root.light-theme {
+    --bgColor: white;
+    --color: black;
+}
+
+:root.dark-theme {
+    --bgColor: black;
+    --color: white;
 }

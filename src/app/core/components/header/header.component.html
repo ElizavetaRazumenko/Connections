@@ -1,5 +1,29 @@
 <div class="header_container">
-  <app-logo (click)="goToTheMain()"></app-logo>
+  <div class="left_part_wrapper">
+    <app-logo (click)="goToTheMain()"></app-logo>
+    <div class="theme-switcher">
+      <label>
+        Light
+        <input
+          type="radio"
+          class="radio-light-theme"
+          name="theme"
+          value="light"
+          (change)="switchTheme()"
+          [checked]="currentTheme === 'light'" />
+      </label>
+      <label>
+        Dark
+        <input
+          type="radio"
+          class="radio-dark-theme"
+          name="theme"
+          value="dark"
+          (change)="switchTheme()"
+          [checked]="currentTheme === 'dark'" />
+      </label>
+    </div>
+  </div>
   <nav class="nav_bar">
     <ul class="nav_items">
       <li>
@@ -15,12 +39,6 @@
           (click)="goToTheProfile()">
           Profile
         </button>
-      </li>
-      <li>
-        <button class="nav_button">Groups</button>
-      </li>
-      <li>
-        <button class="nav_button">Conversations</button>
       </li>
       <ng-container *ngIf="isUserAuth$ | async as isUserAuth">
         <ng-container *ngIf="isUserAuth">

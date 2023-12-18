@@ -24,6 +24,7 @@
         display: flex;
         flex-direction: column;
         border: 3px solid $main-black;
+        color: $main-black;
 
         .input_container {
             min-height: 60px;
@@ -62,7 +63,8 @@
         text-align: center;
     }
 
-    .button_register {
+    .button_register,
+    .button_register-black {
         cursor: pointer;
         text-decoration: underline;
         border: none;
@@ -75,6 +77,11 @@
         &:hover {
             color: $main-grey;
         }
+    }
+
+    .button_register-black {
+        background-color: $main-black;
+        color: $main-white;
     }
    
 }

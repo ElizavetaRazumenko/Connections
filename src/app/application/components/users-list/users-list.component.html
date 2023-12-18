@@ -2,7 +2,7 @@
   <p class="title">People</p>
   <div class="update_wrapper">
     <button
-      [class]="timer.canBeUpdate ? 'button' : 'button_disabled'"
+      [class]="timer.canBeUpdate && isButtonUpdateAble? 'button' : 'button_disabled'"
       (click)="updateUsers()">
       Update
     </button>

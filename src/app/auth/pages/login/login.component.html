@@ -2,7 +2,9 @@
   <p class="title">Login</p>
   <div class="login_wrapper">
     <p class="title_login">Don't have an account yet?</p>
-    <button class="button_register" (click)="goToTheRegisterPage()">
+    <button
+      [class]="currentTheme === 'dark' ? 'button_register-black' : 'button_register'"
+      (click)="goToTheRegisterPage()">
       Register
     </button>
   </div>

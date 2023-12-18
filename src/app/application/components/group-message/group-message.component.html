@@ -1,6 +1,6 @@
 <div class="message">
   <p [class]="messageInfo.isMyMessage ? 'name my' : 'name'">
-    {{ messageInfo.isMyMessage ? 'Me' : messageInfo.authorID }}
+    {{ messageInfo.isMyMessage ? 'Me' : userName }}
   </p>
   <p [class]="messageInfo.isMyMessage ? 'content my' : 'content'">
     {{ messageInfo.message}}

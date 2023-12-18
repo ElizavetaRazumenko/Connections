@@ -37,5 +37,25 @@ export const usersReducer = createReducer(
         data: [...conversationsData]
       }
     })
+  ),
+  on(
+    UsersActions.usersAddConversationAction,
+    (state: UsersState, { conversationsData }): UsersState => ({
+      ...state,
+      conversations: {
+        ...state.conversations,
+        data: [...state.conversations.data, conversationsData]
+      }
+    })
+  ),
+  on(
+    UsersActions.usersRemoveConversationAction,
+    (state: UsersState, { id }): UsersState => ({
+      ...state,
+      conversations: {
+        ...state.conversations,
+        data: [...state.conversations.data.filter((chat) => chat.id !== id)]
+      }
+    })
   )
 );

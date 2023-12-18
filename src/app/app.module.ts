@@ -15,6 +15,7 @@ import { GroupEffects } from './redux/effects/group.effect';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { UsersEffects } from './redux/effects/users.effect';
 import { GroupChatsEffects } from './redux/effects/group-chats.effect';
+import { UserChatsEffects } from './redux/effects/user-chats.effect';
 
 @NgModule({
   declarations: [AppComponent],
@@ -37,7 +38,8 @@ import { GroupChatsEffects } from './redux/effects/group-chats.effect';
       ProfileEffects,
       GroupEffects,
       UsersEffects,
-      GroupChatsEffects
+      GroupChatsEffects,
+      UserChatsEffects
     ])
   ],
   providers: [

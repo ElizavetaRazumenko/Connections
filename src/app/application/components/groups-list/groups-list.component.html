@@ -2,7 +2,7 @@
   <p class="title">Groups</p>
   <div class="update_wrapper">
     <button
-      [class]="timer.canBeUpdate ? 'button' : 'button_disabled'"
+      [class]="timer.canBeUpdate && isButtonUpdateAble ? 'button' : 'button_disabled'"
       (click)="updateGroups()">
       Update
     </button>
@@ -14,10 +14,15 @@
     </div>
   </div>
 
-  <button class="button_create" (click)="toTheFormMode($event)">
-    <div class="create_icon"></div>
-    <p class="main_text">Create a new group</p>
-  </button>
+  <ng-container *ngIf="currentTheme">
+    <button
+      [class]="currentTheme === 'dark' ? 'button_create-black' : 'button_create'"
+      (click)="toTheFormMode($event)">
+      <div class="create_icon"></div>
+      <p class="main_text">Create a new group</p>
+    </button>
+  </ng-container>
+
   <ng-container *ngIf="isFormMode">
     <div class="form_wrapper">
       <form
@@ -73,7 +78,9 @@
           </button>
           <button
             type="button"
-            class="button form_button"
+            [class]="!isRequestCanBeSent
+            ? 'button_disabled form_button' 
+            : 'button form_button'"
             (click)="fromTheFormMode()">
             Cancel
           </button>
@@ -87,12 +94,18 @@
       <p class="delete_title">Need to delete a selected group?</p>
 
       <div class="buttons_wrapper">
-        <button class="button form_button" (click)="deleteGroup()">
+        <button
+          [class]="!isRequestCanBeSent
+        ? 'button_disabled form_button' 
+        : 'button form_button'"
+          (click)="deleteGroup()">
           Delete
         </button>
         <button
           type="button"
-          class="button form_button"
+          [class]="!isRequestCanBeSent
+            ? 'button_disabled form_button' 
+            : 'button form_button'"
           (click)="fromTheGroupDeletionMode()">
           Cancel
         </button>

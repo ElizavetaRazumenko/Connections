@@ -1,7 +1,9 @@
 <ng-container *ngIf="userList">
   <ng-container *ngIf="userList.id !== currentUserId">
-    <div [class]="isOpenDialog ? 'user_wrapper dedicated' : 'user_wrapper'">
+    <button
+      [class]="isOpenDialog ? 'user_wrapper dedicated' : 'user_wrapper'"
+      (click)="toTheUsersDialog()">
       <p class="user_name">{{ userList.name }}</p>
-    </div>
+    </button>
   </ng-container>
 </ng-container>

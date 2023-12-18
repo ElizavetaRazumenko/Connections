@@ -1,7 +1,7 @@
 <div class="dialogs_wrapper">
   <div class="update_wrapper">
     <button
-      [class]="timer.canBeUpdate ? 'button' : 'button_disabled'"
+      [class]="timer.canBeUpdate && isButtonUpdateAble? 'button' : 'button_disabled'"
       (click)="updateGroups()">
       Update
     </button>
@@ -13,17 +13,17 @@
     </div>
   </div>
   <div class="messages_wrapper">
-    <ng-container *ngIf="messages.length">
-      <div class="messages">
+    <div class="messages" #messagesContainer>
+      <ng-container *ngIf="messages && messages.length">
         <div
-          *ngFor="let message of messages"
+          *ngFor="let message of messages | dateSorting"
           [class]="message.isMyMessage ? 'my message' : 'message'">
           <app-group-message [messageInfo]="message"></app-group-message>
         </div>
-      </div>
-    </ng-container>
+      </ng-container>
+    </div>
 
-    <form [formGroup]="messageForm">
+    <form [formGroup]="messageForm" (ngSubmit)="sentMessage()">
       <input type="text" formControlName="message" />
       <button
         [class]="messageForm.invalid ?  'button_send_msg_disabled' : 'button_send_msg'">
@@ -31,5 +31,31 @@
       </button>
     </form>
   </div>
+
+  <ng-container *ngIf="isMyGroup">
+    <button class="button button_delete" (click)="openDeleteModal()">
+      Delete my group
+    </button>
+  </ng-container>
   <a class="button link" routerLink="/">To the Main</a>
+
+  <ng-container *ngIf="isOnDetelionMode">
+    <div class="form_wrapper modal_delete">
+      <p class="delete_title">Need to delete a selected group?</p>
+
+      <div class="buttons_wrapper">
+        <button
+          [class]="isButtonAble ? 'button form_button' : 'button_disabled form_button'"
+          (click)="deleteGroup()">
+          Delete
+        </button>
+        <button
+          type="button"
+          [class]="isButtonAble ? 'button form_button' : 'button_disabled form_button'"
+          (click)="closeDeleteModal()">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </ng-container>
 </div>

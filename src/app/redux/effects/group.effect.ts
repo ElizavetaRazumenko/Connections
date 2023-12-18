@@ -46,6 +46,25 @@ export class GroupEffects {
     );
   });
 
+  getGroupsNoTimerEffect$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(GroupActions.groupGetRequestDataNoTimerAction),
+      switchMap(() =>
+        this.httpService.gesGroupsListRequest().pipe(
+          mergeMap((data) => [
+            GroupActions.groupSaveDataAction({
+              groupsData: this.convertData(data as ResponseGroupsData)
+            })
+          ]),
+          catchError((error) => {
+            const message = error.error.message as string;
+            return of(GroupActions.groupErrorAction({ message }));
+          })
+        )
+      )
+    );
+  });
+
   private convertData(data: ResponseGroupsData): GroupData[] {
     return data.Items.map((item) => ({
       id: item.id.S,

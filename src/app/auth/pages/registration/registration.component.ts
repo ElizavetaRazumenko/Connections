@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -12,13 +12,16 @@ import { AuthService } from '../../services/auth.service';
 import { loginNotValid } from '../../validators/login.validator';
 import { Store } from '@ngrx/store';
 import { alertAddAlertAction } from 'src/app/redux/actions/alert.action';
+import { Subject, take, takeUntil } from 'rxjs';
+import { ThemeService } from 'src/app/core/services/theme.service';
 
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.component.html',
   styleUrls: ['./registration.component.scss']
 })
-export class RegistrationComponent implements OnInit {
+export class RegistrationComponent implements OnInit, OnDestroy {
+  private ngSubscribe$ = new Subject<void>();
   public registerForm!: FormGroup<{
     firstName: FormControl;
     email: FormControl<string | null>;
@@ -32,11 +35,16 @@ export class RegistrationComponent implements OnInit {
   public currentEmail = '';
   public isShowUserError = false;
 
+  private currentTheme$ = this.themeService.currentTheme$;
+  public currentTheme =
+    localStorage.getItem('theme') === 'dark' ? 'dark' : 'ligth';
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private authService: AuthService,
-    private store: Store
+    private store: Store,
+    private themeService: ThemeService
   ) {}
 
   ngOnInit(): void {
@@ -48,6 +56,15 @@ export class RegistrationComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, passwordNotStrength]]
     });
+
+    this.currentTheme$.pipe(takeUntil(this.ngSubscribe$)).subscribe((theme) => {
+      this.currentTheme = theme;
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.ngSubscribe$.next();
+    this.ngSubscribe$.complete();
   }
 
   public get firstName() {
@@ -63,7 +80,7 @@ export class RegistrationComponent implements OnInit {
   }
 
   public onFormSubmit() {
-    if (this.canRequestBeSent) {
+    if (this.canRequestBeSent && !this.registerForm.invalid) {
       this.isUserExist = false;
       this.canRequestBeSent = false;
       this.currentEmail = this.registerForm.controls.email.value || '';
@@ -74,7 +91,7 @@ export class RegistrationComponent implements OnInit {
         this.registerForm.controls.password.value || ''
       );
 
-      this.registrationResponseData$.subscribe({
+      this.registrationResponseData$.pipe(take(1)).subscribe({
         next: () => {
           this.store.dispatch(
             alertAddAlertAction({

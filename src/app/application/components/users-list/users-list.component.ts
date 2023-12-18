@@ -9,11 +9,13 @@ import {
   usersGetRequestDataAction
 } from 'src/app/redux/actions/users.action';
 import { Timer, TimerTime } from 'src/app/redux/models/timer.model';
+import { UsersData } from 'src/app/redux/models/users.model';
 import { selectTimer } from 'src/app/redux/selectors/timerUsers.selector';
 import {
   selectUsersData,
   selectUsersError
 } from 'src/app/redux/selectors/users.selector';
+import { ApplicationService } from '../../services/application.service';
 
 @Component({
   selector: 'app-users-list',
@@ -24,8 +26,14 @@ export class UsersListComponent implements OnInit, OnDestroy {
   private ngSubscribe$ = new Subject<void>();
 
   public usersList$ = this.store.select(selectUsersData);
+  private usersList!: UsersData[];
+
+  public isButtonUpdateAble = true;
 
   private errorMessage$ = this.store.select(selectUsersError);
+
+  private abilityToUpdate$ = this.applicationService.isUsersListCanBeUpdate$;
+  private abilityToUpdate!: boolean;
 
   public timer$ = this.store.select(selectTimer);
   public timer!: Timer;
@@ -34,9 +42,24 @@ export class UsersListComponent implements OnInit, OnDestroy {
     seconds: 0
   };
 
-  constructor(private readonly store: Store) {}
+  constructor(
+    private readonly store: Store,
+    private applicationService: ApplicationService
+  ) {}
 
   ngOnInit(): void {
+    this.usersList$
+      .pipe(takeUntil(this.ngSubscribe$))
+      .subscribe((usersList) => {
+        this.usersList = usersList;
+      });
+
+    this.abilityToUpdate$
+      .pipe(takeUntil(this.ngSubscribe$))
+      .subscribe((value) => {
+        this.abilityToUpdate = value;
+      });
+
     this.timer$.pipe(takeUntil(this.ngSubscribe$)).subscribe((timer) => {
       this.timer = timer;
       this.time = {
@@ -45,11 +68,13 @@ export class UsersListComponent implements OnInit, OnDestroy {
       };
 
       if (timer.shouldBeStartCounted) {
+        if (!this.usersList.length || this.abilityToUpdate) {
+          this.store.dispatch(usersGetRequestDataAction());
+          this.store.dispatch(usersGetConversationDataAction());
+        }
         this.store.dispatch(
           timerUsersStartCountedAction({ shouldBeStartCounted: false })
         );
-        this.store.dispatch(usersGetConversationDataAction());
-        this.store.dispatch(usersGetRequestDataAction());
       }
     });
 
@@ -76,10 +101,15 @@ export class UsersListComponent implements OnInit, OnDestroy {
   }
 
   public updateUsers() {
-    if (this.timer.canBeUpdate) {
+    if (this.timer.canBeUpdate && this.isButtonUpdateAble) {
+      this.isButtonUpdateAble = false;
+      this.applicationService.changeIsUsersListUpdating(true);
       this.store.dispatch(
         timerUsersStartCountedAction({ shouldBeStartCounted: true })
       );
+      setTimeout(() => {
+        this.isButtonUpdateAble = true;
+      }, 5000);
     }
   }
 }

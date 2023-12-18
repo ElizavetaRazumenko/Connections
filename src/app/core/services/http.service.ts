@@ -86,9 +86,20 @@ export interface GroupMessageData {
     S: string;
   };
 }
+
+export type UserMessageData = GroupMessageData;
 export interface ResponseGroupMessagesData {
   Count: number;
   Items: GroupMessageData[];
+}
+
+export interface ResponseUserMessagesData {
+  Count: number;
+  Items: UserMessageData[];
+}
+
+export interface ResponseConversationCreate {
+  conversationID: string;
 }
 
 @Injectable({
@@ -113,7 +124,17 @@ export class HttpService {
 
   private readonly conversationsURL = 'conversations/list';
 
+  private readonly createConversationURL = 'conversations/create';
+
   private readonly groupMessagesURL = 'groups/read?';
+
+  private readonly groupSendMessageURL = 'groups/append';
+
+  private readonly usersMessagesURL = 'conversations/read?';
+
+  private readonly usersDeleteChatURL = 'conversations/delete?';
+
+  private readonly usersSendMessageURL = 'conversations/append';
 
   constructor(private http: HttpClient) {}
 
@@ -193,6 +214,15 @@ export class HttpService {
     return this.http.get(this.conversationsURL, { headers });
   }
 
+  public createConversationRequest(companion: string) {
+    const headers = this.getHeaders();
+    return this.http.post(
+      this.createConversationURL,
+      { companion },
+      { headers, observe: 'response' }
+    );
+  }
+
   public getGroupMessages(id: string, since?: number) {
     const headers = this.getHeaders();
     const params: HttpParams = since
@@ -204,5 +234,55 @@ export class HttpService {
       params,
       observe: 'response'
     });
+  }
+
+  public sendGroupMessage(groupID: string, message: string) {
+    const headers = this.getHeaders();
+
+    return this.http.post(
+      this.groupSendMessageURL,
+      { groupID, message },
+      {
+        headers,
+        observe: 'response'
+      }
+    );
+  }
+
+  public getUsersMessages(id: string, since?: number) {
+    const headers = this.getHeaders();
+    const params: HttpParams = since
+      ? new HttpParams().set('conversationID', id).set('since', since)
+      : new HttpParams().set('conversationID', id);
+
+    return this.http.get(this.usersMessagesURL, {
+      headers,
+      params,
+      observe: 'response'
+    });
+  }
+
+  public sendDeleteUsersChatRequest(id: string) {
+    const headers = this.getHeaders();
+    const params: HttpParams = new HttpParams().set('conversationID', id);
+
+    return this.http.delete(this.usersDeleteChatURL, {
+      headers,
+      params,
+      observe: 'response'
+    });
+  }
+
+  public sendMessageUsersChatRequest(conversationID: string, message: string) {
+    const headers = this.getHeaders();
+
+    return this.http.post(
+      this.usersSendMessageURL,
+      { conversationID, message },
+      {
+        headers,
+        observe: 'response'
+      }
+    );
   }
 }

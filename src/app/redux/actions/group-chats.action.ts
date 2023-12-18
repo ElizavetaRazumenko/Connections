@@ -4,6 +4,7 @@ import { GroupChat } from '../models/group-chats.model';
 export enum GroupChatsType {
   saveChatsData = '[group chats] saveChatsData',
   sendChatsRequest = '[group chats] sendChatsRequest',
+  sendChatsNoTimerRequest = '[group chats] sendChatsNoTimerRequest',
   removeChat = '[group chats] removeChat',
   error = '[group chats] error'
 }
@@ -15,6 +16,11 @@ export const chatsSaveDataAction = createAction(
 
 export const chatsSendDataAction = createAction(
   GroupChatsType.sendChatsRequest,
+  props<{ id: string; since?: number }>()
+);
+
+export const chatsSendDataNoTimerAction = createAction(
+  GroupChatsType.sendChatsNoTimerRequest,
   props<{ id: string; since?: number }>()
 );
 

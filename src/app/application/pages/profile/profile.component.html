@@ -73,7 +73,7 @@
       <ng-container *ngIf="!isOnEditionMode">
         <button
           type="button"
-          class="button button_edit"
+          [class]="!isRequestCanBeSent? 'button button_disabled button_edit' : 'button button_edit'"
           (click)="toTheEditionMode()">
           Edit
         </button>
@@ -83,7 +83,10 @@
           [class]="editionalForm.invalid || !isRequestCanBeSent? 'button button_disabled' : 'button'">
           Save
         </button>
-        <button type="button" class="button" (click)="toTheNormalMode()">
+        <button
+          type="button"
+          [class]="!isRequestCanBeSent? 'button button_disabled' : 'button'"
+          (click)="toTheNormalMode()">
           Cancel
         </button>
       </ng-container>

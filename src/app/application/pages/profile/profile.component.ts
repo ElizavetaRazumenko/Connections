@@ -7,7 +7,7 @@ import {
   Validators
 } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, take, takeUntil } from 'rxjs';
 import { loginNotValid } from 'src/app/auth/validators/login.validator';
 import {
   profileSendUserDataAction,
@@ -50,6 +50,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.editionalForm = this.fb.group({
+      name: ['', [Validators.required, loginNotValid, Validators.maxLength(40)]]
+    });
+
     this.profileData$.pipe(takeUntil(this.ngSubscribe$)).subscribe((data) => {
       if (!data.isDataBeenReceived) {
         this.store.dispatch(profileSendUserDataAction());
@@ -60,14 +64,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.errorMessage$
-      .pipe(takeUntil(this.ngSubscribe$))
-      .subscribe((message) => {
-        if (message) this.sendNotifyErrorOnload(message);
-      });
-
-    this.editionalForm = this.fb.group({
-      name: ['', [Validators.required, loginNotValid, Validators.maxLength(40)]]
+    this.errorMessage$.pipe(take(1)).subscribe((message) => {
+      if (message) this.sendNotifyErrorOnload(message);
     });
   }
 
@@ -77,10 +75,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   public onFormSubmit() {
-    if (!this.editionalForm.invalid || this.isRequestCanBeSent) {
+    if (!this.editionalForm.invalid && this.isRequestCanBeSent) {
       this.isRequestCanBeSent = false;
       this.applicationService.changeNameQueryParams(this.name.value || '');
-      this.profileResponseData$.pipe(takeUntil(this.ngSubscribe$)).subscribe({
+      this.profileResponseData$.pipe(take(1)).subscribe({
         next: () => {
           this.store.dispatch(
             profileSetNameAction({ name: this.name.value || '' })
@@ -152,6 +150,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   public toTheNormalMode() {
-    this.isOnEditionMode = false;
+    if (this.isRequestCanBeSent) {
+      this.isOnEditionMode = false;
+    }
   }
 }

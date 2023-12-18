@@ -14,6 +14,9 @@ import { usersNode } from '../reducers/users.reducer';
 import { groupChatsNode } from '../reducers/group-chats.reducer';
 import { GroupChatsState } from './group-chats.model';
 import { timerGroupChatsNode } from '../reducers/timerGroupChats.reducer';
+import { userChatsNode } from '../reducers/user-chats.reducer';
+import { UserChatsState } from './user-chats.model';
+import { timerUserChatsNode } from '../reducers/timerUserChats.reducer';
 
 export interface State {
   [profileNode]: ProfileState;
@@ -21,8 +24,10 @@ export interface State {
   [timerGroupNode]: TimerState;
   [timerUsersNode]: TimerState;
   [timerGroupChatsNode]: TimerState;
+  [timerUserChatsNode]: TimerState;
   [groupNode]: GroupState;
   [usersNode]: UsersState;
   [modalNode]: ModalState;
   [groupChatsNode]: GroupChatsState;
+  [userChatsNode]: UserChatsState;
 }

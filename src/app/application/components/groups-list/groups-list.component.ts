@@ -25,6 +25,8 @@ import { Timer, TimerTime } from 'src/app/redux/models/timer.model';
 import { timerStartCountedAction } from 'src/app/redux/actions/timerGroup.action';
 import { GroupService } from '../../services/group.service';
 import { HttpService } from 'src/app/core/services/http.service';
+import { GroupData } from 'src/app/redux/models/group.model';
+import { ThemeService } from 'src/app/core/services/theme.service';
 
 interface responseGroupID {
   groupID: string;
@@ -37,9 +39,12 @@ interface responseGroupID {
 })
 export class GroupsListComponent implements OnInit, OnDestroy {
   public groupsList$ = this.store.select(selectGroupsData);
+  private groupsList!: GroupData[];
   private ngSubscribe$ = new Subject<void>();
   public isRequestCanBeSent = true;
   private errorMessage$ = this.store.select(selectGroupError);
+
+  public isButtonUpdateAble = true;
 
   public isFormMode!: boolean;
   public isGroupDeletionMode!: boolean;
@@ -47,6 +52,8 @@ export class GroupsListComponent implements OnInit, OnDestroy {
   private deletingGroupId$ = this.GroupServise.deletingGroupId$;
   private deletingGroupId!: string;
   private isGroupDeletionMode$ = this.GroupServise.isGroupDeletionMode$;
+  private abilityToUpdate$ = this.applicationService.isGroupsListCanBeUpdate$;
+  private abilityToUpdate!: boolean;
 
   public timer$ = this.store.select(selectTimer);
   public timer!: Timer;
@@ -59,18 +66,35 @@ export class GroupsListComponent implements OnInit, OnDestroy {
     name: FormControl;
   }>;
 
+  private currentTheme$ = this.themeService.currentTheme$;
+  public currentTheme =
+    localStorage.getItem('theme') === 'dark' ? 'dark' : 'ligth';
+
   constructor(
     private readonly store: Store,
     private fb: FormBuilder,
     private applicationService: ApplicationService,
     private GroupServise: GroupService,
-    private httpService: HttpService
+    private httpService: HttpService,
+    private themeService: ThemeService
   ) {}
 
   ngOnInit(): void {
     this.createGroupForm = this.fb.group({
       name: ['', [Validators.required, nameNotValid, Validators.maxLength(30)]]
     });
+
+    this.groupsList$
+      .pipe(takeUntil(this.ngSubscribe$))
+      .subscribe((groupsList) => {
+        this.groupsList = groupsList;
+      });
+
+    this.abilityToUpdate$
+      .pipe(takeUntil(this.ngSubscribe$))
+      .subscribe((value) => {
+        this.abilityToUpdate = value;
+      });
 
     this.timer$.pipe(takeUntil(this.ngSubscribe$)).subscribe((timer) => {
       this.timer = timer;
@@ -80,7 +104,9 @@ export class GroupsListComponent implements OnInit, OnDestroy {
       };
 
       if (timer.shouldBeStartCounted) {
-        this.store.dispatch(groupGetRequestDataAction());
+        if (!this.groupsList.length || this.abilityToUpdate) {
+          this.store.dispatch(groupGetRequestDataAction());
+        }
         this.store.dispatch(
           timerStartCountedAction({ shouldBeStartCounted: false })
         );
@@ -116,6 +142,10 @@ export class GroupsListComponent implements OnInit, OnDestroy {
           );
         }
       });
+
+    this.currentTheme$.pipe(takeUntil(this.ngSubscribe$)).subscribe((theme) => {
+      this.currentTheme = theme;
+    });
   }
 
   ngOnDestroy(): void {
@@ -124,15 +154,20 @@ export class GroupsListComponent implements OnInit, OnDestroy {
   }
 
   public updateGroups() {
-    if (this.timer.canBeUpdate) {
+    if (this.timer.canBeUpdate && this.isButtonUpdateAble) {
+      this.isButtonUpdateAble = false;
+      this.applicationService.changeIsGroupsListUpdating(true);
       this.store.dispatch(
         timerStartCountedAction({ shouldBeStartCounted: true })
       );
+      setTimeout(() => {
+        this.isButtonUpdateAble = true;
+      }, 5000);
     }
   }
 
   public onFormSublit() {
-    if (this.isRequestCanBeSent) {
+    if (!this.createGroupForm.invalid && this.isRequestCanBeSent) {
       this.isRequestCanBeSent = false;
       if (this.name.value) {
         this.applicationService.changeGroupNameQueryParams(this.name.value);
@@ -161,8 +196,8 @@ export class GroupsListComponent implements OnInit, OnDestroy {
               })
             );
 
-            this.fromTheFormMode();
             this.isRequestCanBeSent = true;
+            this.fromTheFormMode();
           },
           error: () => {
             this.store.dispatch(
@@ -175,7 +210,6 @@ export class GroupsListComponent implements OnInit, OnDestroy {
               })
             );
 
-            this.fromTheFormMode();
             this.isRequestCanBeSent = true;
           }
         });
@@ -194,49 +228,62 @@ export class GroupsListComponent implements OnInit, OnDestroy {
   }
 
   public fromTheFormMode() {
-    this.GroupServise.fromTheFormMode();
-    this.createGroupForm.setValue({ name: '' });
+    if (this.isRequestCanBeSent) {
+      this.GroupServise.fromTheFormMode();
+      this.createGroupForm.setValue({ name: '' });
+    }
   }
 
   public fromTheGroupDeletionMode() {
-    this.GroupServise.fromTheGroupDeletionMode();
+    if (this.isRequestCanBeSent) {
+      this.GroupServise.fromTheGroupDeletionMode();
+    }
   }
 
   public deleteGroup() {
-    this.fromTheGroupDeletionMode();
-    this.httpService.sendDeleteGroupRequest(this.deletingGroupId).subscribe({
-      next: () => {
-        this.store.dispatch(
-          groupRemoveGroupAction({ id: this.deletingGroupId })
-        );
+    if (this.isRequestCanBeSent) {
+      this.isRequestCanBeSent = false;
+      this.httpService
+        .sendDeleteGroupRequest(this.deletingGroupId)
+        .pipe(take(1))
+        .subscribe({
+          next: () => {
+            this.store.dispatch(
+              groupRemoveGroupAction({ id: this.deletingGroupId })
+            );
 
-        this.store.dispatch(
-          alertAddAlertAction({
-            notify: {
-              message: 'The group deleted successfully',
-              isSuccess: true,
-              id: window.crypto.randomUUID()
-            }
-          })
-        );
-      },
-      error: (error) => {
-        const message = error.error.message;
-        let reason = '';
-        if (message.endsWith('removed before.')) {
-          reason = 'Unsuccessful! The group has already been deleted';
-        } else reason = 'Something went wrong, please try again';
-        this.store.dispatch(
-          alertAddAlertAction({
-            notify: {
-              message: reason,
-              isSuccess: false,
-              id: window.crypto.randomUUID()
-            }
-          })
-        );
-      }
-    });
+            this.store.dispatch(
+              alertAddAlertAction({
+                notify: {
+                  message: 'The group deleted successfully',
+                  isSuccess: true,
+                  id: window.crypto.randomUUID()
+                }
+              })
+            );
+            this.isRequestCanBeSent = true;
+            this.fromTheGroupDeletionMode();
+          },
+          error: (error) => {
+            const message = error.error.message;
+            let reason = '';
+            if (message.endsWith('removed before.')) {
+              reason = 'Unsuccessful! The group has already been deleted';
+            } else reason = 'Something went wrong, please try again';
+            this.store.dispatch(
+              alertAddAlertAction({
+                notify: {
+                  message: reason,
+                  isSuccess: false,
+                  id: window.crypto.randomUUID()
+                }
+              })
+            );
+            this.isRequestCanBeSent = true;
+            this.fromTheGroupDeletionMode();
+          }
+        });
+    }
   }
 
   public get name() {

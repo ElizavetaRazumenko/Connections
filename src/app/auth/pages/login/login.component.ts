@@ -10,6 +10,7 @@ import { AuthService } from '../../services/auth.service';
 import { Store } from '@ngrx/store';
 import { alertAddAlertAction } from 'src/app/redux/actions/alert.action';
 import { Subject, takeUntil } from 'rxjs';
+import { ThemeService } from 'src/app/core/services/theme.service';
 
 interface LoginResponseBody {
   token: string;
@@ -38,17 +39,26 @@ export class LoginComponent implements OnInit, OnDestroy {
     password: ''
   };
 
+  private currentTheme$ = this.themeService.currentTheme$;
+  public currentTheme =
+    localStorage.getItem('theme') === 'dark' ? 'dark' : 'ligth';
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private authService: AuthService,
-    private store: Store
+    private store: Store,
+    private themeService: ThemeService
   ) {}
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
+    });
+
+    this.currentTheme$.pipe(takeUntil(this.ngSubscribe$)).subscribe((theme) => {
+      this.currentTheme = theme;
     });
   }
 
@@ -66,7 +76,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   public onFormSubmit() {
-    if (this.canRequestBeSent) {
+    if (this.canRequestBeSent && !this.loginForm.invalid) {
       this.canRequestBeSent = false;
       this.authService.changeLoginQueryParams(
         this.loginForm.controls.email.value || '',

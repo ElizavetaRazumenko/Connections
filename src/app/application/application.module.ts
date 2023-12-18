@@ -13,6 +13,8 @@ import { GroupDialogComponent } from './pages/group-dialog/group-dialog.componen
 import { RouterModule } from '@angular/router';
 import { GroupMessageComponent } from './components/group-message/group-message.component';
 import { DateMessagesPipe } from './pipes/date-messages.pipe';
+import { DateSortingPipe } from './pipes/date-sorting.pipe';
+import { UsersDialogsComponent } from './pages/users-dialogs/users-dialogs.component';
 
 @NgModule({
   declarations: [
@@ -26,14 +28,17 @@ import { DateMessagesPipe } from './pipes/date-messages.pipe';
     UserComponent,
     GroupDialogComponent,
     GroupMessageComponent,
-    DateMessagesPipe
+    DateMessagesPipe,
+    DateSortingPipe,
+    UsersDialogsComponent
   ],
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
   exports: [
     ErrorComponent,
     MainComponent,
     ProfileComponent,
-    GroupDialogComponent
+    GroupDialogComponent,
+    UsersDialogsComponent
   ]
 })
 export class ApplicationModule {}

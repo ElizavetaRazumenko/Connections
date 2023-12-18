@@ -1,0 +1,60 @@
+<div class="dialogs_wrapper">
+  <div class="update_wrapper">
+    <button
+      [class]="timer.canBeUpdate && isButtonUpdateAble? 'button' : 'button_disabled'"
+      (click)="updateDialog()">
+      Update
+    </button>
+
+    <div [class]="timer.isVisible ? 'timer' : 'timer hidden'">
+      <span>{{ time.minutes | leadingZero }}</span>
+      <span>:</span>
+      <span>{{ time.seconds | leadingZero }}</span>
+    </div>
+  </div>
+
+  <div class="messages_wrapper">
+    <div class="messages" #messagesContainer>
+      <ng-container *ngIf="messages && messages.length">
+        <div
+          *ngFor="let message of messages | dateSorting"
+          [class]="message.isMyMessage ? 'my message' : 'message'">
+          <app-group-message [messageInfo]="message"></app-group-message>
+        </div>
+      </ng-container>
+    </div>
+
+    <form [formGroup]="messageForm" (ngSubmit)="sentMessage()">
+      <input type="text" formControlName="message" />
+      <button
+        [class]="messageForm.invalid ?  'button_send_msg_disabled' : 'button_send_msg'">
+        Send
+      </button>
+    </form>
+  </div>
+  <button class="button button_delete" (click)="openDeleteModal()">
+    Delete the chat
+  </button>
+
+  <a class="button link" routerLink="/">To the Main</a>
+
+  <ng-container *ngIf="isOnDetelionMode">
+    <div class="form_wrapper modal_delete">
+      <p class="delete_title">Need to delete this chat?</p>
+
+      <div class="buttons_wrapper">
+        <button
+          [class]="isButtonAble ? 'button form_button' : 'button_disabled form_button'"
+          (click)="deleteChat()">
+          Delete
+        </button>
+        <button
+          type="button"
+          [class]="isButtonAble ? 'button form_button' : 'button_disabled form_button'"
+          (click)="closeDeleteModal()">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </ng-container>
+</div>

@@ -46,6 +46,25 @@ export class UsersEffects {
     );
   });
 
+  getUsersNoTimer$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(UsersActions.usersGetRequestDataNoTimerAction),
+      switchMap(() =>
+        this.httpService.getMembersRequest().pipe(
+          mergeMap((data) => [
+            UsersActions.usersSaveDataAction({
+              usersData: this.convertUsersData(data as ResponseUsersData)
+            })
+          ]),
+          catchError((error) => {
+            const message = error.error.message as string;
+            return of(UsersActions.usersErrorAction({ message }));
+          })
+        )
+      )
+    );
+  });
+
   getConversations$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(UsersActions.usersGetConversationDataAction),

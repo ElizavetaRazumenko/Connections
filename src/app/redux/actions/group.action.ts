@@ -6,6 +6,7 @@ export enum GroupeType {
   addGroup = '[group] addGroup',
   sendGroupData = '[group] sendGroupData',
   getGroupDataRequest = '[group] getGroupDataRequest',
+  getGroupDataNoTimerRequest = '[group] getGroupDataNoTimerRequest',
   removeGroup = '[group] removeGroup',
   error = '[group] error'
 }
@@ -22,6 +23,10 @@ export const groupAddGroupAction = createAction(
 
 export const groupGetRequestDataAction = createAction(
   GroupeType.getGroupDataRequest
+);
+
+export const groupGetRequestDataNoTimerAction = createAction(
+  GroupeType.getGroupDataNoTimerRequest
 );
 
 export const groupRemoveGroupAction = createAction(

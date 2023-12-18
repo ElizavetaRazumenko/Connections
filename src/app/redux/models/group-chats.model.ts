@@ -8,6 +8,7 @@ export interface MessagesInfo {
 export interface GroupChat {
   id: string;
   messages: MessagesInfo[];
+  lastRequestAt: string;
 }
 
 export interface GroupChatsState {

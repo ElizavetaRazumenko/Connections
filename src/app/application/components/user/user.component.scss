@@ -3,7 +3,7 @@
 .user_wrapper {
   cursor: pointer;
   padding: 0 35px;
-  width: 95%;
+  width: 90%;
   height: 45px;
   display: flex;
   align-items: center;
@@ -11,6 +11,7 @@
   margin: 10px 0;
   transition: .5s;
   box-shadow: 1px 2px 3px 1px $main-grey;
+  border: none;
   background-color: rgba($main-black-hover, .15);
 
   &:hover {
@@ -23,6 +24,7 @@
     font-size: 1.4rem;
     margin: 0;
     margin-left: 10px;
+    color: var(--color);
   }
 
 }

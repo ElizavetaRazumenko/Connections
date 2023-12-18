@@ -13,6 +13,11 @@ import {
   timerGroupChatsNode,
   timerGroupChatsReducer
 } from './timerGroupChats.reducer';
+import { userChatsNode, userChatsReducer } from './user-chats.reducer';
+import {
+  timerUserChatsNode,
+  timerUserChatsReducer
+} from './timerUserChats.reducer';
 
 export const reducers: ActionReducerMap<State> = {
   [profileNode]: profileReducer,
@@ -20,8 +25,10 @@ export const reducers: ActionReducerMap<State> = {
   [timerGroupNode]: timerGroupReducer,
   [timerUsersNode]: timerUsersReducer,
   [timerGroupChatsNode]: timerGroupChatsReducer,
+  [timerUserChatsNode]: timerUserChatsReducer,
   [groupNode]: groupReducer,
   [usersNode]: usersReducer,
   [modalNode]: modalReducer,
-  [groupChatsNode]: groupChatsReducer
+  [groupChatsNode]: groupChatsReducer,
+  [userChatsNode]: userChatsReducer
 };

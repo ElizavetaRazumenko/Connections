@@ -9,6 +9,7 @@ import { TimerCounterComponent } from './components/timer-counter/timer-counter.
 import { ModalComponent } from './components/modal/modal.component';
 import { TimerUsersCounterComponent } from './components/timer-users-counter/timer-users-counter.component';
 import { TimerGroupChatsComponent } from './components/timer-group-chats/timer-group-chats.component';
+import { TimerUserChatsComponent } from './components/timer-user-chats/timer-user-chats.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { TimerGroupChatsComponent } from './components/timer-group-chats/timer-g
     TimerCounterComponent,
     ModalComponent,
     TimerUsersCounterComponent,
-    TimerGroupChatsComponent
+    TimerGroupChatsComponent,
+    TimerUserChatsComponent
   ],
   imports: [CommonModule, HttpClientModule],
   exports: [
@@ -28,6 +30,7 @@ import { TimerGroupChatsComponent } from './components/timer-group-chats/timer-g
     TimerCounterComponent,
     TimerUsersCounterComponent,
     TimerGroupChatsComponent,
+    TimerUserChatsComponent,
     ModalComponent
   ]
 })

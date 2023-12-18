@@ -1,7 +1,6 @@
 <ng-container *ngIf="groupList.createdBy !== currentUserId">
   <button class="group_wrapper" (click)="toTheGroupDialog()">
     <p class="group_name">{{ groupList.name }}</p>
-    <p class="group_name">{{ groupList.createdBy }}</p>
   </button>
 </ng-container>
 
