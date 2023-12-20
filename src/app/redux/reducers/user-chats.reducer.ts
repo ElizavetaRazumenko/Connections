@@ -47,5 +47,13 @@ export const userChatsReducer = createReducer(
       ...state,
       errorMessage: message
     })
+  ),
+  on(
+    UserChatsActions.chatsUsersClearAction,
+    (state: UserChatsState): UserChatsState => ({
+      ...state,
+      chats: [],
+      errorMessage: ''
+    })
   )
 );

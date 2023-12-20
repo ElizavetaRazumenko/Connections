@@ -51,5 +51,22 @@ export const profileReducer = createReducer(
         }
       }
     })
+  ),
+  on(
+    ProfileActions.profileClearAction,
+    (state: ProfileState): ProfileState => ({
+      ...state,
+      profile: {
+        ...state.profile,
+        data: {
+          email: '',
+          name: '',
+          uid: '',
+          createdAt: '',
+          isDataBeenReceived: false
+        },
+        errorMessage: ''
+      }
+    })
   )
 );

@@ -12,6 +12,7 @@ import { selectTimer } from 'src/app/redux/selectors/timerGroup.selector';
 import {
   groupAddGroupAction,
   groupGetRequestDataAction,
+  groupGetRequestDataNoTimerAction,
   groupRemoveGroupAction
 } from 'src/app/redux/actions/group.action';
 import {
@@ -54,6 +55,9 @@ export class GroupsListComponent implements OnInit, OnDestroy {
   private isGroupDeletionMode$ = this.GroupServise.isGroupDeletionMode$;
   private abilityToUpdate$ = this.applicationService.isGroupsListCanBeUpdate$;
   private abilityToUpdate!: boolean;
+  private isGroupListShouldLoadData$ =
+    this.applicationService.isGroupListShouldLoadData$;
+  private isGroupListShouldLoadData!: boolean;
 
   public timer$ = this.store.select(selectTimer);
   public timer!: Timer;
@@ -94,6 +98,16 @@ export class GroupsListComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.ngSubscribe$))
       .subscribe((value) => {
         this.abilityToUpdate = value;
+      });
+
+    this.isGroupListShouldLoadData$
+      .pipe(takeUntil(this.ngSubscribe$))
+      .subscribe((value) => {
+        this.isGroupListShouldLoadData = value;
+        if (this.isGroupListShouldLoadData) {
+          this.store.dispatch(groupGetRequestDataNoTimerAction());
+          this.applicationService.changeIsGroupListShouldLoadData(false);
+        }
       });
 
     this.timer$.pipe(takeUntil(this.ngSubscribe$)).subscribe((timer) => {

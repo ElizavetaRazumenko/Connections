@@ -57,5 +57,20 @@ export const usersReducer = createReducer(
         data: [...state.conversations.data.filter((chat) => chat.id !== id)]
       }
     })
+  ),
+  on(
+    UsersActions.usersClearAction,
+    (state: UsersState): UsersState => ({
+      ...state,
+      users: {
+        Count: 0,
+        data: [],
+        errorMessage: ''
+      },
+      conversations: {
+        Count: 0,
+        data: []
+      }
+    })
   )
 );

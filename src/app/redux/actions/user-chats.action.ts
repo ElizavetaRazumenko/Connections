@@ -6,7 +6,8 @@ export enum UserChatsType {
   sendChatsRequest = '[user chats] sendChatsRequest',
   sendChatsNoTimerRequest = '[user chats] sendChatsNoTimerRequest',
   removeChat = '[user chats] removeChat',
-  error = '[user chats] error'
+  error = '[user chats] error',
+  clear = '[user chats] clear'
 }
 
 export const chatsSaveDataAction = createAction(
@@ -33,3 +34,5 @@ export const chatsErrorAction = createAction(
   UserChatsType.error,
   props<{ message: string }>()
 );
+
+export const chatsUsersClearAction = createAction(UserChatsType.clear);

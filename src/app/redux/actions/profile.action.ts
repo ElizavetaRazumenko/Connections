@@ -5,7 +5,8 @@ export enum ProfileType {
   saveProfileData = '[profile] saveProfileData',
   sendUserData = '[profile] sendUserData',
   error = '[profile] error',
-  setName = '[profile] setName'
+  setName = '[profile] setName',
+  clear = '[profile] clear'
 }
 
 export const profileSaveDataAction = createAction(
@@ -24,3 +25,5 @@ export const profileSetNameAction = createAction(
   ProfileType.setName,
   props<{ name: string }>()
 );
+
+export const profileClearAction = createAction(ProfileType.clear);

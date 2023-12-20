@@ -42,16 +42,6 @@ body {
     transition-property: background-color, color;
 }
 
-// :root:has(.radio-dark-theme:checked) {
-//     --bgColor: black;
-//     --color: white;
-// }
-
-// :root:has(.radio-light-theme:checked) {
-//     --bgColor: white;
-//     --color: black;
-// }
-
 :root.light-theme {
     --bgColor: white;
     --color: black;

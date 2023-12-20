@@ -1,5 +1,3 @@
-/* eslint-disable @ngrx/no-dispatch-in-effects */
-/* eslint-disable class-methods-use-this */
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, mergeMap, of, switchMap, take } from 'rxjs';

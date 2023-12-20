@@ -1,8 +1,8 @@
-/////////[p;/* eslint-disable @ngrx/avoid-dispatching-multiple-actions-sequentially */
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { GroupData } from 'src/app/redux/models/group.model';
 import { GroupService } from '../../services/group.service';
+import { ThemeService } from 'src/app/core/services/theme.service';
 
 @Component({
   selector: 'app-group',
@@ -15,9 +15,13 @@ export class GroupComponent {
     : '';
   @Input() public groupList!: GroupData;
 
+  public currentTheme =
+    localStorage.getItem('theme') === 'dark' ? 'dark' : 'ligth';
+
   constructor(
     private GroupServise: GroupService,
-    private router: Router
+    private router: Router,
+    private themeService: ThemeService
   ) {}
 
   public prepareForDeliting(event: MouseEvent) {

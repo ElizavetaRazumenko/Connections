@@ -96,4 +96,49 @@ export class ApplicationService {
   public changeIsUsersListUpdating(value: boolean) {
     this.isUsersListCanBeUpdate.next(value);
   }
+  // FLAGS TO LOAD DATA IN THE FIRST INITIALIZATION
+
+  // FOR GROUPS LIST
+  private isGroupListShouldLoadData: BehaviorSubject<boolean> =
+    new BehaviorSubject(true);
+
+  public isGroupListShouldLoadData$: Observable<boolean> =
+    this.isGroupListShouldLoadData.asObservable();
+
+  public changeIsGroupListShouldLoadData(value: boolean) {
+    this.isGroupListShouldLoadData.next(value);
+  }
+
+  // FOR GROUP DIALOG
+  private isGroupDialogShouldLoadData: BehaviorSubject<boolean> =
+    new BehaviorSubject(true);
+
+  public isGroupDialogShouldLoadData$: Observable<boolean> =
+    this.isGroupDialogShouldLoadData.asObservable();
+
+  public changeIsGroupDialogShouldLoadData(value: boolean) {
+    this.isGroupDialogShouldLoadData.next(value);
+  }
+
+  // FOR USERS LIST
+  private isUsersListShouldLoadData: BehaviorSubject<boolean> =
+    new BehaviorSubject(true);
+
+  public isUsersListShouldLoadData$: Observable<boolean> =
+    this.isUsersListShouldLoadData.asObservable();
+
+  public changeIsUsersListShouldLoadData(value: boolean) {
+    this.isUsersListShouldLoadData.next(value);
+  }
+
+  // FOR USER CHAT
+  private isUserChatShouldLoadData: BehaviorSubject<boolean> =
+    new BehaviorSubject(true);
+
+  public isUserChatShouldLoadData$: Observable<boolean> =
+    this.isUserChatShouldLoadData.asObservable();
+
+  public changeIsUserChatShouldLoadData(value: boolean) {
+    this.isUserChatShouldLoadData.next(value);
+  }
 }

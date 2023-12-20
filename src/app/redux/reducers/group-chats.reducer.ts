@@ -47,5 +47,13 @@ export const groupChatsReducer = createReducer(
       ...state,
       errorMessage: message
     })
+  ),
+  on(
+    GroupChatsActions.chatsClearAction,
+    (state: GroupChatsState): GroupChatsState => ({
+      ...state,
+      chats: [],
+      errorMessage: ''
+    })
   )
 );

@@ -1,16 +1,12 @@
 {
   "root": true,
-  "ignorePatterns": [
-    "projects/**/*"
-  ],
+  "ignorePatterns": ["projects/**/*"],
   "parserOptions": {
     "project": "**/tsconfig.json"
   },
   "overrides": [
     {
-      "files": [
-        "*.ts"
-      ],
+      "files": ["*.ts"],
       "extends": [
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
@@ -18,9 +14,7 @@
         "plugin:@angular-eslint/template/process-inline-templates",
         "plugin:prettier/recommended"
       ],
-      "plugins": [
-        "prettier"
-      ],
+      "plugins": ["prettier"],
       "rules": {
         "@angular-eslint/directive-selector": [
           "error",
@@ -38,13 +32,14 @@
             "style": "kebab-case"
           }
         ],
-        "prettier/prettier": "error"
+        "prettier/prettier": "error",
+        "@typescript-eslint/no-non-null-assertion": "off",
+        "@ngrx/no-dispatch-in-effects": "off",
+        "class-methods-use-this": "off"
       }
     },
     {
-      "files": [
-        "*.html"
-      ],
+      "files": ["*.html"],
       "extends": [
         "plugin:@angular-eslint/template/recommended",
         "plugin:@angular-eslint/template/accessibility",
@@ -55,12 +50,8 @@
       }
     },
     {
-      "files": [
-        "*.ts"
-      ],
-      "extends": [
-        "plugin:@ngrx/recommended"
-      ]
+      "files": ["*.ts"],
+      "extends": ["plugin:@ngrx/recommended"]
     }
   ]
 }

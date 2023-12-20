@@ -1,4 +1,3 @@
-/* eslint-disable class-methods-use-this */
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, of, switchMap } from 'rxjs';

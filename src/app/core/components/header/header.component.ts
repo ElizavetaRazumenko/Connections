@@ -1,3 +1,4 @@
+/* eslint-disable @ngrx/avoid-dispatching-multiple-actions-sequentially */
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NavigationSkipped, NavigationStart, Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/services/auth.service';
@@ -6,6 +7,13 @@ import { Store } from '@ngrx/store';
 import { alertAddAlertAction } from 'src/app/redux/actions/alert.action';
 import { Subject, take, takeUntil } from 'rxjs';
 import { CurrentTheme, ThemeService } from '../../services/theme.service';
+import { chatsClearAction } from 'src/app/redux/actions/group-chats.action';
+import { groupClearAction } from 'src/app/redux/actions/group.action';
+import { profileClearAction } from 'src/app/redux/actions/profile.action';
+import { chatsUsersClearAction } from 'src/app/redux/actions/user-chats.action';
+import { usersClearAction } from 'src/app/redux/actions/users.action';
+import { ApplicationService } from 'src/app/application/services/application.service';
+import { GroupService } from 'src/app/application/services/group.service';
 
 enum Themes {
   DARK = 'dark',
@@ -36,7 +44,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private httpService: HttpService,
     private store: Store,
-    private themeService: ThemeService
+    private themeService: ThemeService,
+    private applicationService: ApplicationService
   ) {}
 
   ngOnInit(): void {
@@ -89,6 +98,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
                 }
               })
             );
+            // REMOVE DATA FROM STORE
+            this.store.dispatch(chatsClearAction());
+            this.store.dispatch(groupClearAction());
+            this.store.dispatch(profileClearAction());
+            this.store.dispatch(chatsUsersClearAction());
+            this.store.dispatch(usersClearAction());
 
             this.router.navigate(['/signin']);
             this.isLogoutButtonClicked = false;

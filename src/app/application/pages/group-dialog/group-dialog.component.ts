@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @ngrx/avoid-dispatching-multiple-actions-sequentially */
 import {
   Component,
@@ -26,12 +25,7 @@ import {
   groupGetRequestDataNoTimerAction,
   groupRemoveGroupAction
 } from 'src/app/redux/actions/group.action';
-import {
-  timerCanBeUpdateAction,
-  timerChangeMinutesAction,
-  timerChangeSecondsAction,
-  timerStartCountedAction
-} from 'src/app/redux/actions/timerGroupChats.action';
+import { timerStartCountedAction } from 'src/app/redux/actions/timerGroupChats.action';
 import { usersGetRequestDataNoTimerAction } from 'src/app/redux/actions/users.action';
 import {
   GroupChat,
@@ -87,6 +81,11 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
     this.applicationService.isGroupsChatFirstInitialization$;
 
   private isFirstInitialization!: boolean;
+
+  private isGroupDialogShouldLoadData$ =
+    this.applicationService.isGroupDialogShouldLoadData$;
+  private isGroupDialogShouldLoadData!: boolean;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -153,6 +152,19 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
       }
     }
 
+    this.isGroupDialogShouldLoadData$
+      .pipe(takeUntil(this.ngSubscribe$))
+      .subscribe((value) => {
+        this.isGroupDialogShouldLoadData = value;
+        if (this.isGroupDialogShouldLoadData) {
+          this.store.dispatch(
+            chatsSendDataNoTimerAction({ id: this.currentId })
+          );
+          this.applicationService.changeIsGroupDialogShouldLoadData(false);
+          this.applicationService.changeIsGroupsChatInitial(false);
+        }
+      });
+
     this.timer$.pipe(takeUntil(this.ngSubscribe$)).subscribe((timer) => {
       this.timer = timer;
       this.time = {
@@ -170,7 +182,6 @@ export class GroupDialogComponent implements OnInit, OnDestroy {
         this.store.dispatch(
           timerStartCountedAction({ shouldBeStartCounted: false })
         );
-        this.applicationService.changeIsGroupsChatInitial(false);
       }
     });
 

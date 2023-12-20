@@ -9,7 +9,8 @@ export enum UsersType {
   getUsersDataRequest = '[users] getUsersDataRequest',
   getUsersDataNoTimerRequest = '[users] getUsersDataNoTimerRequest',
   getConversationRequest = '[users] getConversationRequest',
-  error = '[users] error'
+  error = '[users] error',
+  clear = '[users] clear'
 }
 
 export const usersSaveDataAction = createAction(
@@ -48,3 +49,5 @@ export const usersErrorAction = createAction(
   UsersType.error,
   props<{ message: string }>()
 );
+
+export const usersClearAction = createAction(UsersType.clear);

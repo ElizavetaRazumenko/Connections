@@ -7,7 +7,9 @@
 <ng-container *ngIf="groupList.createdBy === currentUserId">
   <button class="group_wrapper custom_group" (click)="toTheGroupDialog()">
     <p class="group_name">{{ groupList.name }}</p>
-    <button class="button_delete" (click)="prepareForDeliting($event)">
+    <button
+      [class]="currentTheme === 'dark' ? 'button_delete_dark' : 'button_delete' "
+      (click)="prepareForDeliting($event)">
       <div class="delete_icon"></div>
     </button>
   </button>

@@ -11,6 +11,7 @@ import { Store } from '@ngrx/store';
 import { alertAddAlertAction } from 'src/app/redux/actions/alert.action';
 import { Subject, takeUntil } from 'rxjs';
 import { ThemeService } from 'src/app/core/services/theme.service';
+import { ApplicationService } from 'src/app/application/services/application.service';
 
 interface LoginResponseBody {
   token: string;
@@ -48,7 +49,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     private router: Router,
     private authService: AuthService,
     private store: Store,
-    private themeService: ThemeService
+    private themeService: ThemeService,
+    private applicationService: ApplicationService
   ) {}
 
   ngOnInit(): void {
@@ -86,6 +88,11 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.loginResponseData$.pipe(takeUntil(this.ngSubscribe$)).subscribe({
         next: (response) => {
           this.saveLoginTokensToLS(response.body as LoginResponseBody);
+
+          this.applicationService.changeIsGroupListShouldLoadData(true);
+          this.applicationService.changeIsUsersListShouldLoadData(true);
+          this.applicationService.changeIsGroupsChatInitial(true);
+          this.applicationService.changeIsUserChatInitial(true);
 
           this.store.dispatch(
             alertAddAlertAction({

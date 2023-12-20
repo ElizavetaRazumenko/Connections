@@ -53,5 +53,16 @@ export const groupReducer = createReducer(
         data: [groupData, ...state.group.data]
       }
     })
+  ),
+  on(
+    GroupActions.groupClearAction,
+    (state: GroupState): GroupState => ({
+      ...state,
+      group: {
+        ...state.group,
+        data: [],
+        errorMessage: ''
+      }
+    })
   )
 );

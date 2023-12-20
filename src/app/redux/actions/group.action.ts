@@ -8,7 +8,8 @@ export enum GroupeType {
   getGroupDataRequest = '[group] getGroupDataRequest',
   getGroupDataNoTimerRequest = '[group] getGroupDataNoTimerRequest',
   removeGroup = '[group] removeGroup',
-  error = '[group] error'
+  error = '[group] error',
+  clear = '[group] clear'
 }
 
 export const groupSaveDataAction = createAction(
@@ -38,3 +39,5 @@ export const groupErrorAction = createAction(
   GroupeType.error,
   props<{ message: string }>()
 );
+
+export const groupClearAction = createAction(GroupeType.clear);

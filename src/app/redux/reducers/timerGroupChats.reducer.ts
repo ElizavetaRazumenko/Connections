@@ -7,7 +7,7 @@ export const timerGroupChatsNode = 'timerGroupChats';
 export const initialState: TimerState = {
   timer: {
     isVisible: false,
-    shouldBeStartCounted: true,
+    shouldBeStartCounted: false,
     canBeUpdate: true,
     minutes: 1,
     seconds: 60,

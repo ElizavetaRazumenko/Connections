@@ -6,7 +6,8 @@ import { alertAddAlertAction } from 'src/app/redux/actions/alert.action';
 import { timerUsersStartCountedAction } from 'src/app/redux/actions/timerUsers.action';
 import {
   usersGetConversationDataAction,
-  usersGetRequestDataAction
+  usersGetRequestDataAction,
+  usersGetRequestDataNoTimerAction
 } from 'src/app/redux/actions/users.action';
 import { Timer, TimerTime } from 'src/app/redux/models/timer.model';
 import { UsersData } from 'src/app/redux/models/users.model';
@@ -42,6 +43,10 @@ export class UsersListComponent implements OnInit, OnDestroy {
     seconds: 0
   };
 
+  private isUsersListShouldLoadData$ =
+    this.applicationService.isUsersListShouldLoadData$;
+  private isUsersListShouldLoadData!: boolean;
+
   constructor(
     private readonly store: Store,
     private applicationService: ApplicationService
@@ -58,6 +63,17 @@ export class UsersListComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.ngSubscribe$))
       .subscribe((value) => {
         this.abilityToUpdate = value;
+      });
+
+    this.isUsersListShouldLoadData$
+      .pipe(takeUntil(this.ngSubscribe$))
+      .subscribe((value) => {
+        this.isUsersListShouldLoadData = value;
+        if (this.isUsersListShouldLoadData) {
+          this.store.dispatch(usersGetRequestDataNoTimerAction());
+          this.store.dispatch(usersGetConversationDataAction());
+          this.applicationService.changeIsUsersListShouldLoadData(false);
+        }
       });
 
     this.timer$.pipe(takeUntil(this.ngSubscribe$)).subscribe((timer) => {

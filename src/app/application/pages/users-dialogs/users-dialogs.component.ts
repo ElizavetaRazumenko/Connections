@@ -1,5 +1,4 @@
 /* eslint-disable @ngrx/avoid-dispatching-multiple-actions-sequentially */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {
   Component,
   ElementRef,
@@ -78,6 +77,10 @@ export class UsersDialogsComponent implements OnInit, OnDestroy {
 
   private isFirstInitialization!: boolean;
 
+  private isUserChatShouldLoadData$ =
+    this.applicationService.isUserChatShouldLoadData$;
+  private isUserChatShouldLoadData!: boolean;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -129,6 +132,19 @@ export class UsersDialogsComponent implements OnInit, OnDestroy {
         this.store.dispatch(chatsSendDataNoTimerAction({ id: this.currentId }));
       }
     }
+
+    this.isUserChatShouldLoadData$
+      .pipe(takeUntil(this.ngSubscribe$))
+      .subscribe((value) => {
+        this.isUserChatShouldLoadData = value;
+        if (this.isUserChatShouldLoadData) {
+          this.store.dispatch(
+            chatsSendDataNoTimerAction({ id: this.currentId })
+          );
+          this.applicationService.changeIsUserChatShouldLoadData(false);
+          this.applicationService.changeIsUserChatInitial(false);
+        }
+      });
 
     this.timer$.pipe(takeUntil(this.ngSubscribe$)).subscribe((timer) => {
       this.timer = timer;
